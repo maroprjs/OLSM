@@ -1,9 +1,12 @@
 //defines:
 var THIS_SERVER_IP = '0.0.0.0';
 var THIS_SERVER_HTTP_PORT = 80; //same used for IO
-
-var THIS_SERVER_UDP_PORT_1 = 5555; //to receice controllino status
-
+var THIS_SERVER_UDP_PORT_1 = 5555; //to receice  status
+var gStation1State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+var gStation2State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+var gStation3State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+var gStation4State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+var gStation5State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
 
 //dependencies and global variables:
 var express = require('express');
@@ -75,15 +78,62 @@ udpdserver1.on('listening', function () {
 
 udpdserver1.on('message', function (message, remote) {
     var msg = message.toString();
-    console.log(remote.address + ':' + remote.port + ' - ' + msg);
+    //console.log(remote.address + ':' + remote.port + ' - ' + msg);
     var msgElementArray = msg.split(',');
-    console.log(msgElementArray[0]); //station name
-    console.log(msgElementArray[1]); //tag id
-	if(ioSocket){
-        //console.log("inside socket");
-		ioSocket.emit('selector', msg);
-	}
+    //console.log(msgElementArray[0]); //station name
+    //console.log(msgElementArray[1]); //tag id
+    var stationName = msgElementArray[0];
+    if (stationName == "station1"){
+        
+        if (gStation1State == "FREE"){
+            if(ioSocket){
+                //console.log("inside socket");
+                ioSocket.emit('selector', msg);
+             };
+             gStation1State = "OCCUPIED";
+             armStation1StatusCheck();
+        };
+        if (gStation1State == "STATE_CHECK"){
+            gStation1State = "OCCUPIED";
+        };
+    };
+    if (stationName == "station2"){
+        
+        if (gStation2State == "FREE"){
+            if(ioSocket){
+                //console.log("inside socket");
+                ioSocket.emit('selector', msg);
+             };
+             gStation2State = "OCCUPIED";
+             armStation1StatusCheck();
+        };
+        if (gStation2State == "STATE_CHECK"){
+            gStation2State = "OCCUPIED";
+        };
+    };
+
 });
 
 udpdserver1.bind(THIS_SERVER_UDP_PORT_1, THIS_SERVER_IP);
 
+
+//------------------------ check station state ---------------------------------
+
+function armStation1StatusCheck() {
+  setTimeout(function() { 
+    if (gStation1State == "STATE_CHECK"){   //if station is still in state check, it means that no udp message has arrived in given time frame
+                                            //and most likely no AGV on Station 
+        if(ioSocket){
+            ioSocket.emit('selector', 'station1,00000000'); //00000000 means reset ()
+         };
+         gStation1State = "FREE";
+    }; 
+    if (gStation1State == "OCCUPIED"){
+        gStation1State = "STATE_CHECK";
+        armStation1StatusCheck();   //incomming station message sets state always back to occupied as long as agv is present
+                                    //this function needs to call itself to check if station sent a message
+                                    //otherwise, just emit that station is free again 
+    };
+
+  }, 1500) //TODO: check if 2 seconds is appropriate
+};

@@ -1,3 +1,5 @@
+var gDemoState = "IDLE"; //INVENTORY, ASSEMBLY, CABLING, PROGRAMMING, INSPECTION, FINAL
+
 var ready = (callback) => {
     if (document.readyState != "loading") callback();
     else document.addEventListener("DOMContentLoaded", callback);
@@ -13,14 +15,43 @@ ready(() => {
         ioSocket.emit('adduser', "GUI");
     });
     ioSocket.on('selector', function (data) {
-		console.log(data);
-		//var test = String(data);
-		console.log(data.valueOf());
-        var stationId = data[0];
-        var tagId = data[1];
-        var videopath = video_source[stationId, tagId]
-        document.getElementById('video_source').src = "videos/inspection.mp4";
-
+		//console.log(data);
+		//console.log(data.valueOf());
+        var msg = data.split(',');
+        var stationName = msg[0];
+        var tagId = msg[1];
+        //var videopath = video_source[stationId, tagId]
+        //if (gDemoState){}
+        if (stationName == "station1"){
+            //if (tagId == "00000000"){
+            if (tagId == "8ad1aae"){ 
+                document.getElementById('video_source').src = "videos/inventory.mp4";
+            };
+            if (tagId == "f82684d"){ 
+                document.getElementById('video_source').src = "videos/queue.mp4";
+            };
+        }
+        if (stationName == "station2"){
+            if (tagId == "f82684d"){ 
+                document.getElementById('video_source').src = "videos/assembly.mp4";
+            };
+        }
+        if (stationName == "station3"){
+            if (tagId == "f82684d"){ 
+                document.getElementById('video_source').src = "videos/cabling.mp4";
+            };
+        }
+        if (stationName == "station4"){
+            if (tagId == "f82684d"){ 
+                document.getElementById('video_source').src = "videos/programming.mp4";
+            };
+        }
+        if (stationName == "station5"){
+            if (tagId == "f82684d"){ 
+                document.getElementById('video_source').src = "videos/inspection.mp4";
+            };
+        }
+    
 	});
     //var _video_src = document.getElementById('video_source').src = "videos/inspection.mp4";
 });
