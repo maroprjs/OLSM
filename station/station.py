@@ -41,5 +41,6 @@ if __name__ == '__main__':
                 inform_server(uid_as_str)
     except Exception as e:
         print(e)
+        inform_server("error: " + str(e))
     finally:
         GPIO.cleanup()
