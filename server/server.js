@@ -78,7 +78,7 @@ udpdserver1.on('listening', function () {
 
 udpdserver1.on('message', function (message, remote) {
     var msg = message.toString();
-    //console.log(remote.address + ':' + remote.port + ' - ' + msg);
+    console.log(remote.address + ':' + remote.port + ' - ' + msg);
     var msgElementArray = msg.split(',');
     //console.log(msgElementArray[0]); //station name
     //console.log(msgElementArray[1]); //tag id
@@ -105,13 +105,54 @@ udpdserver1.on('message', function (message, remote) {
                 ioSocket.emit('selector', msg);
              };
              gStation2State = "OCCUPIED";
-             armStation1StatusCheck();
+             armStation2StatusCheck();
         };
         if (gStation2State == "STATE_CHECK"){
             gStation2State = "OCCUPIED";
         };
     };
-
+    if (stationName == "station3"){
+        
+        if (gStation3State == "FREE"){
+            if(ioSocket){
+                //console.log("inside socket");
+                ioSocket.emit('selector', msg);
+             };
+             gStation3State = "OCCUPIED";
+             armStation3StatusCheck();
+        };
+        if (gStation3State == "STATE_CHECK"){
+            gStation3State = "OCCUPIED";
+        };
+    };
+    if (stationName == "station4"){
+        
+        if (gStation4State == "FREE"){
+            if(ioSocket){
+                //console.log("inside socket");
+                ioSocket.emit('selector', msg);
+             };
+             gStation4State = "OCCUPIED";
+             armStation4StatusCheck();
+        };
+        if (gStation4State == "STATE_CHECK"){
+            gStation4State = "OCCUPIED";
+        };
+    };
+    if (stationName == "station5"){
+        
+        if (gStation5State == "FREE"){
+            if(ioSocket){
+                //console.log("inside socket");
+                ioSocket.emit('selector', msg);
+             };
+             gStation5State = "OCCUPIED";
+             armStation5StatusCheck();
+        };
+        if (gStation5State == "STATE_CHECK"){
+            gStation5State = "OCCUPIED";
+        };
+    };
 });
 
 udpdserver1.bind(THIS_SERVER_UDP_PORT_1, THIS_SERVER_IP);
@@ -136,4 +177,83 @@ function armStation1StatusCheck() {
     };
 
   }, 1500) //TODO: check if 2 seconds is appropriate
+};  
+
+function armStation2StatusCheck() {
+    setTimeout(function() { 
+      if (gStation2State == "STATE_CHECK"){   //if station is still in state check, it means that no udp message has arrived in given time frame
+                                              //and most likely no AGV on Station 
+          if(ioSocket){
+              ioSocket.emit('selector', 'station2,00000000'); //00000000 means reset ()
+           };
+           gStation2State = "FREE";
+      }; 
+      if (gStation2State == "OCCUPIED"){
+          gStation2State = "STATE_CHECK";
+          armStation2StatusCheck();   //incomming station message sets state always back to occupied as long as agv is present
+                                      //this function needs to call itself to check if station sent a message
+                                      //otherwise, just emit that station is free again 
+      };
+  
+    }, 1500) //TODO: check if 2 seconds is appropriate  
 };
+
+function armStation3StatusCheck() {
+    setTimeout(function() { 
+      if (gStation3State == "STATE_CHECK"){   //if station is still in state check, it means that no udp message has arrived in given time frame
+                                              //and most likely no AGV on Station 
+          if(ioSocket){
+              ioSocket.emit('selector', 'station3,00000000'); //00000000 means reset ()
+           };
+           gStation3State = "FREE";
+      }; 
+      if (gStation3State == "OCCUPIED"){
+          gStation3State = "STATE_CHECK";
+          armStation3StatusCheck();   //incomming station message sets state always back to occupied as long as agv is present
+                                      //this function needs to call itself to check if station sent a message
+                                      //otherwise, just emit that station is free again 
+      };
+  
+    }, 1500) //TODO: check if 2 seconds is appropriate
+  };  
+
+  function armStation4StatusCheck() {
+    setTimeout(function() { 
+      if (gStation4State == "STATE_CHECK"){   //if station is still in state check, it means that no udp message has arrived in given time frame
+                                              //and most likely no AGV on Station 
+          if(ioSocket){
+              ioSocket.emit('selector', 'station4,00000000'); //00000000 means reset ()
+           };
+           gStation4State = "FREE";
+      }; 
+      if (gStation4State == "OCCUPIED"){
+          gStation4State = "STATE_CHECK";
+          armStation4StatusCheck();   //incomming station message sets state always back to occupied as long as agv is present
+                                      //this function needs to call itself to check if station sent a message
+                                      //otherwise, just emit that station is free again 
+      };
+  
+    }, 1500) //TODO: check if 2 seconds is appropriate
+  };  
+
+  function armStation5StatusCheck() {
+    setTimeout(function() { 
+      if (gStation5State == "STATE_CHECK"){   //if station is still in state check, it means that no udp message has arrived in given time frame
+                                              //and most likely no AGV on Station 
+          if(ioSocket){
+              ioSocket.emit('selector', 'station5,00000000'); //00000000 means reset ()
+           };
+           gStation5State = "FREE";
+      }; 
+      if (gStation5State == "OCCUPIED"){
+          gStation5State = "STATE_CHECK";
+          armStation5StatusCheck();   //incomming station message sets state always back to occupied as long as agv is present
+                                      //this function needs to call itself to check if station sent a message
+                                      //otherwise, just emit that station is free again 
+      };
+  
+    }, 1500) //TODO: check if 2 seconds is appropriate
+  };  
+  
+  
+  

@@ -26,6 +26,8 @@ ready(() => {
             //if (tagId == "00000000"){
             if (tagId == "8ad1aae"){ 
                 document.getElementById('video_source').src = "videos/inventory.mp4";
+            //}else if(tagId == "00000000"){ 
+            //        document.getElementById('video_source').src = "videos/Big_Buck_Bunny_1080_10s_1MB.mp4";  
             };
             if (tagId == "f82684d"){ 
                 document.getElementById('video_source').src = "videos/queue.mp4";
@@ -38,6 +40,7 @@ ready(() => {
         }
         if (stationName == "station3"){
             if (tagId == "f82684d"){ 
+                console.log("cabling");
                 document.getElementById('video_source').src = "videos/cabling.mp4";
             };
         }
@@ -49,6 +52,9 @@ ready(() => {
         if (stationName == "station5"){
             if (tagId == "f82684d"){ 
                 document.getElementById('video_source').src = "videos/inspection.mp4";
+            };
+            if (tagId == "00000000"){ 
+                document.getElementById('video_source').src = "videos/Big_Buck_Bunny_1080_10s_1MB.mp4";
             };
         }
     
