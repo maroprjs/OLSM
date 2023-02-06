@@ -34,7 +34,7 @@ app.get('/', function (req, res) {
 
 //----------------- IO Socket ----------------------------------------
 ioSocket.sockets.on('connection', function (socket) {
-    console.log("connectio");
+    console.log("connection");
     socket.on('adduser', function () {
         socket.room = 'user';
         socket.join('user');
@@ -69,7 +69,7 @@ ioSocket.sockets.on('connection', function (socket) {
     });
 });
 
-//------------------------ udp function ---------------------------------
+//------------------------ udp adapter function---------------------------------
 // udp listener for stations:
 udpdserver1.on('listening', function () {
     var address = udpdserver1.address();
