@@ -2,11 +2,7 @@
 var THIS_SERVER_IP = '0.0.0.0';
 var THIS_SERVER_HTTP_PORT = 80; //same used for IO
 var THIS_SERVER_UDP_PORT_1 = 5555; //to receice  status
-var gStation1State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
-var gStation2State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
-var gStation3State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
-var gStation4State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
-var gStation5State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+
 
 //dependencies and global variables:
 var express = require('express');
@@ -16,6 +12,12 @@ var ioSocket = require('socket.io')(http);
 var dgram = require('dgram');
 //var bodyParser = require("body-parser"); //for POST requests 
 var udpdserver1 = dgram.createSocket('udp4'); //to receice controllino status
+
+var gStation1State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+var gStation2State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+var gStation3State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+var gStation4State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+var gStation5State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
 
 //------------------ app: -------------------------------------------
 // Webserver
@@ -67,9 +69,22 @@ ioSocket.sockets.on('connection', function (socket) {
         //});
 
     });
+
+    //socket.on('selector', function (data) { //which station sequence
+        //console.log("selector received");
+    //    ioSocket.emit('selector', data);
+
+
+    //});
+    socket.on('play_scenario', function (data) { //path to video
+        //console.log("selector received");
+        ioSocket.emit('play_scenario', data);
+
+
+    });
 });
 
-//------------------------ udp adapter function---------------------------------
+//------------------------ udp function---------------------------------
 // udp listener for stations:
 udpdserver1.on('listening', function () {
     var address = udpdserver1.address();
@@ -78,7 +93,18 @@ udpdserver1.on('listening', function () {
 
 udpdserver1.on('message', function (message, remote) {
     var msg = message.toString();
+    //if(ioSocket){
+        //console.log("inside socket");
+    //    ioSocket.emit('udp1_msg', msg);
+    //};   
     console.log(remote.address + ':' + remote.port + ' - ' + msg);
+    filterUdpFromStation(msg);
+});
+
+udpdserver1.bind(THIS_SERVER_UDP_PORT_1, THIS_SERVER_IP);
+
+//just filter out when agv is placed on station and removed from station:
+function filterUdpFromStation(msg){
     var msgElementArray = msg.split(',');
     //console.log(msgElementArray[0]); //station name
     //console.log(msgElementArray[1]); //tag id
@@ -88,6 +114,7 @@ udpdserver1.on('message', function (message, remote) {
         if (gStation1State == "FREE"){
             if(ioSocket){
                 //console.log("inside socket");
+                //console.log(msg);
                 ioSocket.emit('selector', msg);
              };
              gStation1State = "OCCUPIED";
@@ -153,10 +180,8 @@ udpdserver1.on('message', function (message, remote) {
             gStation5State = "OCCUPIED";
         };
     };
-});
 
-udpdserver1.bind(THIS_SERVER_UDP_PORT_1, THIS_SERVER_IP);
-
+};
 
 //------------------------ check station state ---------------------------------
 
@@ -254,6 +279,7 @@ function armStation3StatusCheck() {
   
     }, 1500) //TODO: check if 2 seconds is appropriate
   };  
+
   
   
   
