@@ -1,11 +1,20 @@
 import RPi.GPIO as GPIO
 from pn532 import *
 import socket
+import time
+from enum import Enum
 
 UDP_IP = "10.200.21.80"
 UDP_PORT = 5555
-MESSAGE = socket.gethostname()
+gHostName = socket.gethostname()
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+STATE_TRANSITION_INTERVAL = 1.0
+
+class StationState(Enum):
+    FREE = 1
+    OCCUPIED = 2
+
+#gStationState = StationState.FREE    
 
 def get_uid_string(uid):
     uid_str = ''
@@ -16,13 +25,16 @@ def get_uid_string(uid):
 
 def inform_server(nfc_tag):
    #sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
-   sock.sendto(bytes(MESSAGE + "," + nfc_tag , "utf-8"), (UDP_IP, UDP_PORT))
+   sock.sendto(bytes(gHostName + "," + nfc_tag , "utf-8"), (UDP_IP, UDP_PORT))
    #sock.close()
    #sock.shutdown(socket.SHUT_RDWR)
+
 
 if __name__ == '__main__':
     #print($HOSTNAME)
     #print(socket.gethostname())
+    gStationState = StationState.FREE
+    timeToCheckStationState = time.perf_counter() + STATE_TRANSITION_INTERVAL
     try:
         pn532 = PN532_I2C(debug=False, reset=20, req=16)
 
@@ -32,15 +44,24 @@ if __name__ == '__main__':
         pn532.SAM_configuration()
         print('Waiting for RFID/NFC card...')
         while True:
+            if time.perf_counter() >= timeToCheckStationState: #as long as tag is recognized the time check runs ahead
+                if gStationState != StationState.FREE:
+                    gStationState = StationState.FREE
+                    inform_server("00000000")
             # Check if a card is available to read
             uid = pn532.read_passive_target(timeout=1.5)
-            print('.', end="")
+            #print('.', end="")
             if uid is not None:
+                #gStationState = StationState.OCCUPIED
+                timeToCheckStationState = time.perf_counter() + STATE_TRANSITION_INTERVAL
                 uid_as_str = get_uid_string(uid)
                 print('Found card with UID:', [hex(i) for i in uid], 'as string: ', uid_as_str)
-                inform_server(uid_as_str)
+                if gStationState ==  StationState.FREE:
+                    inform_server(uid_as_str)
+                    gStationState = StationState.OCCUPIED
     except Exception as e:
         print(e)
         inform_server("error: " + str(e))
     finally:
         GPIO.cleanup()
+

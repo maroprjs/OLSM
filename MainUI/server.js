@@ -13,11 +13,11 @@ var dgram = require('dgram');
 //var bodyParser = require("body-parser"); //for POST requests 
 var udpdserver1 = dgram.createSocket('udp4'); //to receice controllino status
 
-var gStation1State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
-var gStation2State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
-var gStation3State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
-var gStation4State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
-var gStation5State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+//var gStation1State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+//var gStation2State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+//var gStation3State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+//var gStation4State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
+//var gStation5State = "FREE"; //"FREE", "OCCUPIED", "STATE_CHECK"
 
 //------------------ app: -------------------------------------------
 // Webserver
@@ -98,11 +98,22 @@ udpdserver1.on('message', function (message, remote) {
     //    ioSocket.emit('udp1_msg', msg);
     //};   
     console.log(remote.address + ':' + remote.port + ' - ' + msg);
-    filterUdpFromStation(msg);
+    //filterUdpFromStation(msg);
+    if(ioSocket){
+        //console.log("inside socket");
+        //console.log(msg);
+        ioSocket.emit('selector', msg);
+     };
 });
 
 udpdserver1.bind(THIS_SERVER_UDP_PORT_1, THIS_SERVER_IP);
 
+
+/*
+*
+*   TODO: THIS IS OBSOLETE: delete this!
+*
+*/
 //just filter out when agv is placed on station and removed from station:
 function filterUdpFromStation(msg){
     var msgElementArray = msg.split(',');
