@@ -76,12 +76,18 @@ ioSocket.sockets.on('connection', function (socket) {
 
 
     //});
-    socket.on('play_scenario', function (data) { //path to video
+    socket.on('play_main_scenario', function (data) { //emit provided by view.js, forwarded to browser
         //console.log("selector received");
-        ioSocket.emit('play_scenario', data);
+        ioSocket.emit('play_main_scenario', data);
 
 
     });
+    socket.on('play_agv_scenario', function (data) { ////emit provided by view.js, forwarded to browser
+        //console.log("selector received");
+        ioSocket.emit('play_agv_scenario', data);
+
+
+    })
 });
 
 //------------------------ udp function---------------------------------
@@ -102,7 +108,7 @@ udpdserver1.on('message', function (message, remote) {
     if(ioSocket){
         //console.log("inside socket");
         //console.log(msg);
-        ioSocket.emit('selector', msg);
+        ioSocket.emit('station_state_info', msg); //this is received by view.js, to chose appropriate video
      };
 });
 

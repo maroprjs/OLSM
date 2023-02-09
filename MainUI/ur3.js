@@ -26,7 +26,7 @@ ioSocket.on('disconnect', function () {
     console.log("Disconnected from " + IO_SOCKET_SERVER_URL );
 });
 
-ioSocket.on('selector', function (data) {
+ioSocket.on('station_state_info', function (data) {
     console.log(data);
     //console.log(data.valueOf());
     var msg = data.split(',');
