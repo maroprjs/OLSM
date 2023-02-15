@@ -16,6 +16,9 @@ TAG_BIT3_PIN = 22
 NFC_READER_SENSED_PIN = 3
 FLASHLIGHT_PIN = 25
 LITTLE_AGV_ATTACHED_PIN = 2 
+STATION_SPI_CS_PIN = 4
+STOCK1_SPI_CS_PIN = 23
+STOCK2_SPI_CS_PIN = 24
 
 #fuel tag 21: 48b99f2656081
 #fuel tag 22: 4d89bf2656080
@@ -48,12 +51,19 @@ GPIO.setup(LITTLE_AGV_ATTACHED_PIN, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 
 #These are aligned with emulated tags from arduino on AGV part:
 class Location(str, Enum): 
-    FREE = '00000000'
+    UNDEFINED = '00000000'
     station1 = '4e189f2656080'
     station2 = '48f7df2656081'
     station3 = '4547cf2656081'
     station4 = '46195f2656081'
     station5 = '4ff95f2656080'
+
+class StockState(Enum):
+    EMPTY = 1
+    OCCUPIED_ELECTRIC = 2
+    OCCUPIED_FUEL = 3
+    UNKNOWN_PART = 4
+
 
 class AgvState(str, Enum):
     #FREE = '00000000'
@@ -166,7 +176,7 @@ def inform_station(tag):
 
 def initializeStationReader():
     try:
-       pn532 = PN532_SPI(debug=False, reset=20, cs=4)
+       pn532 = PN532_SPI(debug=False, reset=20, cs=STATION_SPI_CS_PIN)
        ic, ver, rev, support = pn532.get_firmware_version()
        print('Found Station Reader with firmware version: {0}.{1}'.format(ver, rev))
        pn532.SAM_configuration()
@@ -179,9 +189,9 @@ def initializeStationReader():
         #GPIO.cleanup()
     return pn532
 
-def initializePart1Reader():
+def initializeStock1Reader():
     try:
-       pn532 = PN532_SPI(debug=False, reset=20, cs=23)
+       pn532 = PN532_SPI(debug=False, reset=20, cs=STOCK1_SPI_CS_PIN)
        ic, ver, rev, support = pn532.get_firmware_version()
        print('Found Part1 with firmware version: {0}.{1}'.format(ver, rev))
        pn532.SAM_configuration()
@@ -195,9 +205,9 @@ def initializePart1Reader():
         #GPIO.cleanup()
     return pn532
 
-def initializePart2Reader():
+def initializeStock2Reader():
     try:
-       pn532 = PN532_SPI(debug=False, reset=20, cs=24)
+       pn532 = PN532_SPI(debug=False, reset=20, cs=STOCK2_SPI_CS_PIN)
        ic, ver, rev, support = pn532.get_firmware_version()
        print('Found Part2 with firmware version: {0}.{1}'.format(ver, rev))
        pn532.SAM_configuration()
@@ -215,18 +225,32 @@ def initializePart2Reader():
 if __name__ == '__main__':
     #print($HOSTNAME)
     #print(socket.gethostname())
-    station = initializeStationReader()
-    part1 = initializePart1Reader()
-    part2 = initializePart2Reader()
     smallAgvAttached = True
-    stationState = StationState.FREE
-    timeToCheckStationState = time.perf_counter() + STATE_TRANSITION_INTERVAL
+    stock1State = StockState.EMPTY
+    stock2State = StockState.EMPTY
+    location = Location.UNDEFINED
+    stockCount = 0
+    station = initializeStationReader()
+    stock1 = initializeStock1Reader()
+    stock2 = initializeStock2Reader()
+    print('Waiting for RFID/NFC card...')
+    timeToCheckAgvState = time.perf_counter() + STATE_TRANSITION_INTERVAL
     try:
-        print('Waiting for RFID/NFC card...')
         while True:
-            if time.perf_counter() >= timeToCheckStationState: #as long as tag is recognized the time check runs ahead
-                if stationState != StationState.FREE:
-                    stationState = StationState.FREE
+            if time.perf_counter() >= timeToCheckAgvState: #as long as tag is present the time check runs ahead and condition not reached
+                if (stock1State != StockState.EMPTY) or (stock2State != StockState.EMPTY):
+                   if (agvState != getAgvState(stock1Tag, stock2Tag))
+                      agvState = getAgvState(sstock1State, stock2State)
+                      inform_station(agvState)
+                      inform_server(agvState) #localServer
+                if stock1State != StockState.EMPTY:
+                    stock1State = StockState.EMPTY
+                    inform_station("stock1", stock1State)
+                if stock2State != StockState.EMPTY:
+                    stock2State = StockState.EMPTY
+                    inform_station("stock2", stock2State)
+                if location != LocationState.UNDEFINED: #this just to know which local movie to play
+                    location = LocationState.UNDEFINED
                     inform_server("00000000")
             if GPIO.input(LITTLE_AGV_ATTACHED_PIN) == True:
                 smallAgvAttached = False
@@ -234,30 +258,41 @@ if __name__ == '__main__':
             if (GPIO.input(LITTLE_AGV_ATTACHED_PIN) == False) and (smallAgvAttached == False): #high jump recognized
                 time.sleep(1)
                 station = initializeStationReader()
-                part1 = initializePart1Reader()
-                part2 = initializePart2Reader()
+                stock1 = initializeStock1Reader()
+                stock2 = initializeStock2Reader()
                 smallAgvAttached = True
+                print('Waiting for RFID/NFC card...')
             
             # Check if a card is available to read
-            stationTag = station.read_passive_target(timeout=0.1)
-            if stationTag is not None:
-               #continue
-               print('Found station with nfc UID: ', get_uid_string(stationTag))
-            
+            if station is not None:
+               stationTag = station.read_passive_target(timeout=0.1)
+               if stationTag is not None:
+                  #continue
+                  print('Found station with nfc UID: ', get_uid_string(stationTag))
+                  if (location != getLocation(stationTag)):
+                     location = getLocation(stationTag)
+                     inform_server(stationTag) #to local server            
             if smallAgvAttached == True:
-               part1Tag = part1.read_passive_target(timeout=0.1)
-               if part1Tag is not None:
-                  #continue
-                  print('Found part1 with nfc UID: ', get_uid_string(part1Tag))
-
-               part2Tag = part2.read_passive_target(timeout=0.1)
-               if part2Tag is not None:
-                  #continue
-                  print('Found part2 with nfc UID: ', get_uid_string(part2Tag))
+                if (stock1 is not None) and (stock2 is not None):
+                   stock1Tag = stock1.read_passive_target(timeout=0.1)
+                   stock2Tag = stock2.read_passive_target(timeout=0.1)
+                   if (stock1Tag is not None) and (stock2Tag is not None):
+                      #continue
+                      print('Found stock1 with nfc UID: ', get_uid_string(stock1Tag))
+                      print('Found stock2 with nfc UID: ', get_uid_string(stock2Tag))
+                      if (stock1State != getStock1State(stock1Tag)) or (stock2State != getStock2State(stock2Tag)): #old versus new stock states
+                         #inform_server(uid_as_str) ->informa station
+                         stock1State = getStock2State(stock1Tag)
+                         stock2State = getStock2State(stock2Tag)
+                         if (agvState != getAgvState(stock1Tag, stock2Tag))
+                            agvState = getAgvState(sstock1State, stock2State)
+                            inform_station(agvState)
+                            inform_server(agvState) #localServer
+                
 
     except Exception as e:
         print(e)
-        inform_server("error: " + str(e))
+        #inform_server("error: " + str(e)) #doesn't make sense here
         pass
         #goto .begin
     finally:
