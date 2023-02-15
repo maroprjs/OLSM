@@ -115,10 +115,11 @@ if __name__ == '__main__':
 
             
             # Check if a card is available to read
-            uid = station.read_passive_target(timeout=0.1)
-            if uid is not None:
-               #continue
-               print('Found card with UID:', [hex(i) for i in uid], 'as string: ', get_uid_string(uid))
+            if station is not None
+               uid = station.read_passive_target(timeout=0.1)
+               if uid is not None:
+                  #continue
+                  print('Found card with UID:', [hex(i) for i in uid], 'as string: ', get_uid_string(uid))
             
             if smallAgvAttached == True:
                uid23 = part1.read_passive_target(timeout=0.1)
