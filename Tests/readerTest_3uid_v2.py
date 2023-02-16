@@ -115,7 +115,7 @@ if __name__ == '__main__':
 
             
             # Check if a card is available to read
-            if station is not None
+            if station is not None:
                uid = station.read_passive_target(timeout=0.1)
                if uid is not None:
                   #continue
