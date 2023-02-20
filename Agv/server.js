@@ -87,7 +87,7 @@ ioSocket.sockets.on('connection', function (socket) {
 });
 
 //------------------------ udp function---------------------------------
-// udp listener for stations:
+// udp listener for local AGV messages:
 udpdserver1.on('listening', function () {
     var address = udpdserver1.address();
     console.log('UDP Server listening on ' + address.address + ":" + address.port);
@@ -104,7 +104,7 @@ udpdserver1.on('message', function (message, remote) {
     if(ioSocket){
         //console.log("inside socket");
         //console.log(msg);
-        ioSocket.emit('station_state_info', msg); //this is received by view.js, to chose appropriate video
+        ioSocket.emit('agv_state_info', msg); //this is received by view.js, to chose appropriate video
      };
 });
 
