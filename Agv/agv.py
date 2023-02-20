@@ -4,7 +4,7 @@ import socket
 import time
 from enum import Enum
 
-UDP_IP = "10.200.21.80"
+UDP_IP = "192.168.243.134"
 UDP_PORT = 5555
 AGV_TYPE = "ELECTRIC" #"HYBRID"
 gHostName = socket.gethostname()
@@ -38,7 +38,7 @@ PART_TYPES = {
   "4808af2656080": "ELECTRO",
   "4b876f2656080": "ELECTRO",
   "46071f2656081": "ELECTRO",
-  "00000000":"FREE"
+  "00000000":"NONE"
 }
 
 GPIO.setmode(GPIO.BCM)
@@ -66,16 +66,14 @@ class StockState(Enum):
 
 
 class AgvState(str, Enum):
-    #FREE = '00000000'
-    UNEQUIPPED_ELECTRIC = '8101010'
-    UNEQUIPPED_HYBRID = '8212121'
-    EQUIPPED_ELECTRIC_PART1 = '8323232'
-    EQUIPPED_ELECTRIC_PART2 = '8434343'
-    #EQUIPPED_ELECTRIC_FULL = '-------' 
-    EQUIPPED_HYBRID_FUEL = '8656565'
-    EQUIPPED_HYBRID_ELECTRIC = '8767676'
-    EQUIPPED_HYBRID_FULL = '8545454'
-    WRONG_PART = '88787878'
+    UNEQUIPPED_ELECTRIC = '8878787'
+    UNEQUIPPED_HYBRID = '8767676'
+    EQUIPPED_ELECTRIC_PART1 = '8656565'
+    EQUIPPED_ELECTRIC_PART2 = '8545454'
+    EQUIPPED_HYBRID_PART1 = '8434343'
+    EQUIPPED_HYBRID_PART2 = '8323232'
+    WRONG_PART = '8212121'
+    #placeholder 8101010
 
 
 
@@ -86,13 +84,6 @@ def get_uid_string(uid):
         uid_str = uid_str + hex_str[2:]
     return uid_str
 
-def getAgvState(nfc_tag):
-    stationState = '' 
-    for data in StationState:
-        if data.value == nfc_tag:
-            stationState = data.name
-    return stationState
-
 def getAgvLocation(nfc_tag):
     location = '' 
     for data in Location:
@@ -100,78 +91,99 @@ def getAgvLocation(nfc_tag):
             location = data.name
     return location
 
-def publish_U_ELECTRIC(): #sends tag 8101010
-   GPIO.output(TAG_BIT1_PIN, False) 
-   GPIO.output(TAG_BIT2_PIN, False) 
-   GPIO.output(TAG_BIT3_PIN, False)
+def getAgvState(stock1_tag, stock2_tag ):
+    part1_type = PART_TYPES[stock1_tag]
+    part2_type = PART_TYPES[stock2_tag]
+    agvState = AgvState.UNEQUIPPED_ELECTRIC
+
+    if AGV_TYPE == "ELECTRIC":
+        if part1_type == "NONE"and part2_type == "NONE":
+            agvState = AgvState.UNEQUIPPED_ELECTRIC
+        elif part1_type == "NONE" and part2_type == "ELECTRIC":
+            agvState = AgvState.EQUIPPED_ELECTRIC_PART1
+        elif part1_type == "ELECTRIC" and part2_type == "NONE":
+            agvState = AgvState.EQUIPPED_ELECTRIC_PART1
+        elif part1_type == "ELECTRIC" and part2_type == "ELECTRIC":
+            agvState = AgvState.EQUIPPED_ELECTRIC_PART2
+        else:
+            agvState = AgvState.WRONG_PART
+
+    if AGV_TYPE == "HYBRID":
+        if part1_type == "NONE"and part2_type == "NONE":
+            agvState == AgvState.UNEQUIPPED_HYBRID
+        elif part1_type == "NONE" and part2_type == "FUEL":
+            agvState = AgvState.EQUIPPED_HYBRID_PART1
+        elif part1_type == "FUEL" and part2_type == "NONE":
+            agvState = AgvState.EQUIPPED_HYBRID_PART1
+        elif part1_type == "ELECTRIC" and part2_type == "HYBRID":
+            agvState = AgvState.EQUIPPED_HYBRID_PART2
+        elif part1_type == "HYBRID" and part2_type == "ELECTRIC":
+            agvState = AgvState.EQUIPPED_HYBRID_PART2           
+        else:
+            agvState = AgvState.WRONG_PART
+
+    return agvState
+
+
+def publishNextAgvState( nextState):
+    if nextState == AgvState.UNEQUIPPED_ELECTRIC:
+        publish_U_ELECTRIC()
+    if nextState == AgvState.UNEQUIPPED_HYBRID:
+        publish_U_HYBRID()       
+    if nextState == AgvState.EQUIPPED_ELECTRIC_PART1:
+        publish_E_ELECTRIC_P1()
+    if nextState == AgvState.EQUIPPED_ELECTRIC_PART2:
+        publish_E_ELECTRIC_P2()       
+    if nextState == AgvState.EQUIPPED_HYBRID_PART1:
+        publish_E_HYBRID_P1()
+    if nextState == AgvState.EQUIPPED_HYBRID_PART1:
+        publish_E_HYBRID_P2()
+
+
+def publish_U_ELECTRIC(): #sends tag 8878787
+   GPIO.output(TAG_BIT1_PIN, True) 
+   GPIO.output(TAG_BIT2_PIN, True) 
+   GPIO.output(TAG_BIT3_PIN, True)
    gAgvState = AgvState.UNEQUIPPED_ELECTRIC 
 
-def publish_U_HYBRID(): #sends tag 8212121
-   GPIO.output(TAG_BIT1_PIN, True) 
-   GPIO.output(TAG_BIT2_PIN, False) 
-   GPIO.output(TAG_BIT3_PIN, False)
+def publish_U_HYBRID(): #sends tag 8767676
+   GPIO.output(TAG_BIT1_PIN, False) 
+   GPIO.output(TAG_BIT2_PIN, True) 
+   GPIO.output(TAG_BIT3_PIN, True)
    gAgvState = AgvState.UNEQUIPPED_HYBRID 
 
-def publish_E_ELECTRIC_P1(): #sends tag 8323232
+def publish_E_ELECTRIC_P1(): #sends tag 8656565
+   GPIO.output(TAG_BIT1_PIN, True) 
+   GPIO.output(TAG_BIT2_PIN, False) 
+   GPIO.output(TAG_BIT3_PIN, True)
+   gAgvState = AgvState.EQUIPPED_ELECTRIC_PART1
+
+def publish_E_ELECTRIC_P2(): #sends tag 8545454
+   GPIO.output(TAG_BIT1_PIN, False) 
+   GPIO.output(TAG_BIT2_PIN, False) 
+   GPIO.output(TAG_BIT3_PIN, True)
+   gAgvState = AgvState.EQUIPPED_ELECTRIC_PART2
+
+def publish_E_HYBRID_P1(): #sends tag 8434343
+   GPIO.output(TAG_BIT1_PIN, True) 
+   GPIO.output(TAG_BIT2_PIN, True) 
+   GPIO.output(TAG_BIT3_PIN, False)
+   gAgvState = AgvState.EQUIPPED_HYBRID_PART1
+
+def publish_E_HYBRID_P2(): #sends tag 8323232
    GPIO.output(TAG_BIT1_PIN, False) 
    GPIO.output(TAG_BIT2_PIN, True) 
    GPIO.output(TAG_BIT3_PIN, False)
-   gAgvState = AgvState.EQUIPPED_ELECTRIC_PART1
-
-def publish_E_ELECTRIC_P2(): #sends tag 8434343
-   GPIO.output(TAG_BIT1_PIN, True) 
-   GPIO.output(TAG_BIT2_PIN, True) 
-   GPIO.output(TAG_BIT3_PIN, False)
-   gAgvState = AgvState.EQUIPPED_ELECTRIC_PART2
-
-EQUIPPED_HYBRID_FUEL = '8656565'
-    EQUIPPED_HYBRID_ELECTRIC = '8767676'
-    EQUIPPED_HYBRID_FULL = '8545454'
-    WRONG_PART = '88787878'
+   gAgvState = AgvState.EQUIPPED_HYBRID_PART2
 
 
-def inform_server(station_tag, agv_state):
-   #sock.sendto(bytes(gHostName + "," + getAgvState(nfc_tag) , "utf-8"), (UDP_IP, UDP_PORT))
-   #if getAgvLocation(nfc_tag) == Location.FREE :
-   #   publishFree()
-   msg = getAgvLocation(station_tag) + "," + agvState; #"stationX,<status>"  
+def inform_server(location, agv_state): #locat server to play appropriate video
+   #msg = getAgvLocation(station_tag) + "," + agvState; #"stationX,<status>"  
+   msg = location + "," + agvState; #"stationX,<status>"
    sock.sendto(bytes(msg, "utf-8"), (UDP_IP, UDP_PORT))
-   # if getAgvLocation(nfc_tag) == Location.station1 :
-   #     msg = inform local server -> load video
-   #     send tstaus to station
-   #ToDo
 
-def inform_station(tag):
-    if PART_TYPES[tag] == "FUEL":
-        if AGV_TYPE == "HYBRID":
-            if gAgvState == AgvState.UNEQUIPPED_HYBRID:
-                gAgvState = AgvState.EQUIPPED_HYBRID_FUEL
-            if gAgvState == AgvState.EQUIPPED_HYBRID_FUEL:
-                gAgvState = AgvState.WRONG_PART
-            if gAgvState == AgvState.EQUIPPED_HYBRID_ELECTRIC:
-                gAgvState = AgvState.EQUIPPED_HYBRID_FULL
-        if AGV_TYPE == "ELECTRIC":
-                gAgvState = AgvState.WRONG_PART
 
-    if PART_TYPES[tag] == "ELECTRIC":
-        if AGV_TYPE == "HYBRID":
-            if gAgvState == AgvState.UNEQUIPPED_HYBRID:
-                gAgvState = AgvState.EQUIPPED_HYBRID_ELECTRIC
-            if gAgvState == AgvState.EQUIPPED_HYBRID_FUEL:
-                gAgvState = AgvState.EQUIPPED_HYBRID_FULL
-            if gAgvState == AgvState.EQUIPPED_HYBRID_ELECTRIC:
-                gAgvState = AgvState.WRONG_PART
-        if AGV_TYPE == "ELECTRIC":
-            if gAgvState == AgvState.UNEQUIPPED_ELECTRIC:
-                gAgvState = AgvState.EQUIPPED_ELECTRIC_PART1
-            if gAgvState == AgvState.EQUIPPED_ELECTRIC_PART1:
-                gAgvState = AgvState.EQUIPPED_ELECTRIC_PART2
 
-    if PART_TYPES[tag] == "FREE":
-        if AGV_TYPE == "HYBRID":
-            gAgvState = AgvState.UNEQUIPPED_HYBRID
-        if AGV_TYPE == "ELECTRIC":
-            gAgvState = AgvState.UNEQUIPPED_ELECTRIC
 
 
 def initializeStationReader():
@@ -233,24 +245,21 @@ if __name__ == '__main__':
     station = initializeStationReader()
     stock1 = initializeStock1Reader()
     stock2 = initializeStock2Reader()
-    print('Waiting for RFID/NFC card...')
+    stock1Tag = "00000000"
+    stock2Tag = "00000000"
+    #print('Waiting for RFID/NFC cards...')
+    agvState = AgvState.UNEQUIPPED_ELECTRIC
+    idleState = AgvState.UNEQUIPPED_ELECTRIC
+    publishNextAgvState(agvState)
+    if AGV_TYPE == "HYBRID":
+        agvState = AgvState.UNEQUIPPED_HYBRID
+        idleState = AgvState.UNEQUIPPED_HYBRID
     timeToCheckAgvState = time.perf_counter() + STATE_TRANSITION_INTERVAL
     try:
         while True:
             if time.perf_counter() >= timeToCheckAgvState: #as long as tag is present the time check runs ahead and condition not reached
-                if (stock1State != StockState.EMPTY) or (stock2State != StockState.EMPTY):
-                   if (agvState != getAgvState(stock1Tag, stock2Tag))
-                      agvState = getAgvState(sstock1State, stock2State)
-                      inform_station(agvState)
-                      inform_server(agvState) #localServer
-                if stock1State != StockState.EMPTY:
-                    stock1State = StockState.EMPTY
-                    inform_station("stock1", stock1State)
-                if stock2State != StockState.EMPTY:
-                    stock2State = StockState.EMPTY
-                    inform_station("stock2", stock2State)
-                if location != LocationState.UNDEFINED: #this just to know which local movie to play
-                    location = LocationState.UNDEFINED
+                if location != Location.UNDEFINED: #this just to know when to stop playing local
+                    location = Location.UNDEFINED
                     inform_server("00000000")
             if GPIO.input(LITTLE_AGV_ATTACHED_PIN) == True:
                 smallAgvAttached = False
@@ -268,26 +277,28 @@ if __name__ == '__main__':
                stationTag = station.read_passive_target(timeout=0.1)
                if stationTag is not None:
                   #continue
+                  timeToCheckStationState = time.perf_counter() + STATE_TRANSITION_INTERVAL
                   print('Found station with nfc UID: ', get_uid_string(stationTag))
-                  if (location != getLocation(stationTag)):
-                     location = getLocation(stationTag)
-                     inform_server(stationTag) #to local server            
+                  if (location != getAgvLocation(stationTag)):
+                     location = getAgvLocation(stationTag)
+                     inform_server(location, agvState) #to local server TODO            
             if smallAgvAttached == True:
-                if (stock1 is not None) and (stock2 is not None):
-                   stock1Tag = stock1.read_passive_target(timeout=0.1)
-                   stock2Tag = stock2.read_passive_target(timeout=0.1)
-                   if (stock1Tag is not None) and (stock2Tag is not None):
-                      #continue
-                      print('Found stock1 with nfc UID: ', get_uid_string(stock1Tag))
-                      print('Found stock2 with nfc UID: ', get_uid_string(stock2Tag))
-                      if (stock1State != getStock1State(stock1Tag)) or (stock2State != getStock2State(stock2Tag)): #old versus new stock states
-                         #inform_server(uid_as_str) ->informa station
-                         stock1State = getStock2State(stock1Tag)
-                         stock2State = getStock2State(stock2Tag)
-                         if (agvState != getAgvState(stock1Tag, stock2Tag))
-                            agvState = getAgvState(sstock1State, stock2State)
-                            inform_station(agvState)
-                            inform_server(agvState) #localServer
+                if (stock1 is not None) and (stock2 is not None): #NFC reader present
+                    stock1Tag = stock1.read_passive_target(timeout=0.1)
+                    stock2Tag = stock2.read_passive_target(timeout=0.1)
+                    if stock1Tag is None:
+                        stock1Tag = "00000000"
+                    else: 
+                        print('Found stock1 with nfc UID: ', get_uid_string(stock1Tag))
+                    if stock2Tag is None:
+                        stock2Tag = "00000000"
+                    else:
+                        print('Found stock2 with nfc UID: ', get_uid_string(stock2Tag))
+
+                    if agvState != getAgvState(stock1Tag, stock2Tag):
+                        publishNextAgvState( agvState)
+                        inform_server(location, agvState) #localServer
+
                 
 
     except Exception as e:
