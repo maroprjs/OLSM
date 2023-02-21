@@ -3,13 +3,15 @@ from pn532 import *
 import socket
 import time
 from enum import Enum
+import board
+import neopixel
 
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5555
 AGV_TYPE = "ELECTRIC" #"HYBRID"
 gHostName = socket.gethostname()
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-STATE_TRANSITION_INTERVAL = 2.5
+STATE_TRANSITION_INTERVAL = 1.5
 TAG_BIT1_PIN = 17
 TAG_BIT2_PIN = 27
 TAG_BIT3_PIN = 22
@@ -19,7 +21,30 @@ LITTLE_AGV_ATTACHED_PIN = 2
 STATION_SPI_CS_PIN = 4
 STOCK1_SPI_CS_PIN = 23
 STOCK2_SPI_CS_PIN = 24
+pixel_pin = board.D18
 
+
+# The number of NeoPixels
+num_pixels = 35
+# The order of the pixel colors - RGB or GRB. Some NeoPixels have red and green reversed!
+# For RGBW NeoPixels, simply change the ORDER to RGBW or GRBW.
+ORDER = neopixel.RGB
+
+pixels = neopixel.NeoPixel(
+    pixel_pin, num_pixels, brightness=0.8, auto_write=False, pixel_order=ORDER
+)
+
+#neopixel
+UNDEFINED = "white"
+WAITING1 = "blue"
+WAITING2 = "green"
+PROGRESS = "orange"
+TRANSMIT = "violett"
+RED = "red"
+gFlipFlop = False
+
+
+###TODO: move these to config!
 #fuel tag 21: 48b99f2656081
 #fuel tag 22: 4d89bf2656080
 #fuel tag 23: 49b9af2656080
@@ -40,7 +65,9 @@ PART_TYPES = {
   "46071f2656081": "ELECTRIC",
   "00000000":"NONE"
 }
+
 #These are aligned with emulated tags from arduino on AGV part:
+#should this replace below enumeration?
 #Location = {
 #    'UNDEFINED':'00000000',
 #    'station1':'4e189f2656080',
@@ -69,11 +96,11 @@ class Location(str, Enum):
     station5 = '4ff95f2656080'
     station6 = '4ae85f2656080' #tag 19 for test
 
-class StockState(Enum):
-    EMPTY = 1
-    OCCUPIED_ELECTRIC = 2
-    OCCUPIED_FUEL = 3
-    UNKNOWN_PART = 4
+#class StockState(Enum): at the moment obsolete
+#    EMPTY = 1
+#    OCCUPIED_ELECTRIC = 2
+#    OCCUPIED_FUEL = 3
+#    UNKNOWN_PART = 4
 
 
 class AgvState(str, Enum):
@@ -85,7 +112,6 @@ class AgvState(str, Enum):
     EQUIPPED_HYBRID_PART2 = '8323232'
     WRONG_PART = '8212121'
     #placeholder 8101010
-
 
 
 def get_uid_string(uid):
@@ -104,11 +130,17 @@ def getAgvLocation(nfc_tag):
             location = data.name
     return location
 
+def getAgvStateAsString(nfc_tag):
+    state = ''
+    for data in AgvState:
+        if data.value == nfc_tag:
+            state = data.name
+    return state
+
 def getAgvState(stock1_tag, stock2_tag ):
     part1_type = PART_TYPES[stock1_tag]
     part2_type = PART_TYPES[stock2_tag]
     agvState = AgvState.UNEQUIPPED_ELECTRIC
-
     if AGV_TYPE == "ELECTRIC":
         if part1_type == "NONE"and part2_type == "NONE":
             agvState = AgvState.UNEQUIPPED_ELECTRIC
@@ -120,7 +152,6 @@ def getAgvState(stock1_tag, stock2_tag ):
             agvState = AgvState.EQUIPPED_ELECTRIC_PART2
         else:
             agvState = AgvState.WRONG_PART
-
     if AGV_TYPE == "HYBRID":
         if part1_type == "NONE"and part2_type == "NONE":
             agvState == AgvState.UNEQUIPPED_HYBRID
@@ -134,9 +165,7 @@ def getAgvState(stock1_tag, stock2_tag ):
             agvState = AgvState.EQUIPPED_HYBRID_PART2           
         else:
             agvState = AgvState.WRONG_PART
-
     return agvState
-
 
 def publishNextAgvState(nextState):
     if nextState == AgvState.UNEQUIPPED_ELECTRIC:
@@ -189,15 +218,10 @@ def publish_E_HYBRID_P2(): #sends tag 8323232
    GPIO.output(TAG_BIT3_PIN, False)
    gAgvState = AgvState.EQUIPPED_HYBRID_PART2
 
-
-def inform_server(location, agvState): #locat server to play appropriate video
+def inform_server(location, agvStateTag): #locat server to play appropriate video
    #msg = getAgvLocation(station_tag) + "," + agvState; #"stationX,<status>"  
-   msg = location + "," + agvState; #"stationX,<status>"
+   msg = location + "," + getAgvStateAsString(agvState); #"stationX,<status>"
    sock.sendto(bytes(msg, "utf-8"), (UDP_IP, UDP_PORT))
-
-
-
-
 
 def initializeStationReader():
     try:
@@ -246,36 +270,59 @@ def initializeStock2Reader():
         #GPIO.cleanup()
     return pn532
 
+def setNeopixel(colr):
+   global gFlipFlop
+   global pixels
+   if gFlipFlop == False:
+     gFlipFlop = True
+     if colr == "white":
+        pixels.fill((5, 5, 5))
+     if colr == "blue":
+        pixels.fill((0, 0, 5))
+     if colr == "green":
+        pixels.fill((0, 5, 0))
+     if colr == "orange":
+        pixels.fill((35,15, 0))
+     if colr == "violett":
+        pixels.fill((17, 2, 40))
+     if colr == "red":
+        pixels.fill((5, 0, 0))
+   else:
+        pixels.fill((0, 0, 0))
+        gFlipFlop = False
+   pixels.show()
 
 if __name__ == '__main__':
     #print($HOSTNAME)
     #print(socket.gethostname())
     smallAgvAttached = True
-    stock1State = StockState.EMPTY
-    stock2State = StockState.EMPTY
+    #stock1State = StockState.EMPTY
+    #stock2State = StockState.EMPTY
     location = Location.UNDEFINED
-    stockCount = 0
+    #stockCount = 0
     station = initializeStationReader()
     stock1 = initializeStock1Reader()
     stock2 = initializeStock2Reader()
     stock1Tag = "00000000"
     stock2Tag = "00000000"
-    #print('Waiting for RFID/NFC cards...')
     agvState = AgvState.UNEQUIPPED_ELECTRIC
     idleState = AgvState.UNEQUIPPED_ELECTRIC
     publishNextAgvState(agvState)
     if AGV_TYPE == "HYBRID":
         agvState = AgvState.UNEQUIPPED_HYBRID
         idleState = AgvState.UNEQUIPPED_HYBRID
+    GPIO.output(FLASHLIGHT_PIN, False)
     timeToCheckAgvState = time.perf_counter() + STATE_TRANSITION_INTERVAL
+    timeToSwitchNeopixel = time.perf_counter() +  1.0
     try:
+        setNeopixel(UNDEFINED)
         while True:
             if time.perf_counter() >= timeToCheckAgvState: #as long as tag is present the time check runs ahead and condition not reached
-                print("in reset")
                 if location != getAgvLocation("00000000"): #this just to know when to stop playing local
-                    location = Location.UNDEFINED
+                    location = getAgvLocation("00000000")
                     loc_str = getAgvLocation("00000000")
                     inform_server(loc_str, "00000000")
+                    GPIO.output(FLASHLIGHT_PIN, False)
             if GPIO.input(LITTLE_AGV_ATTACHED_PIN) == True:
                 smallAgvAttached = False
                 time.sleep(1)
@@ -286,19 +333,20 @@ if __name__ == '__main__':
                 stock2 = initializeStock2Reader()
                 smallAgvAttached = True
                 print('Waiting for RFID/NFC card...')
-            
+
             # Check if a card is available to read
             if station is not None:
                stationTag = station.read_passive_target(timeout=0.1)
                if stationTag is not None:
                   #continue
                   timeToCheckAgvState = time.perf_counter() + STATE_TRANSITION_INTERVAL
+                  GPIO.output(FLASHLIGHT_PIN, True)
                   stationTag_str = get_uid_string(stationTag)
                   print('Found station with nfc UID: ', stationTag_str)
                   if (location != getAgvLocation(stationTag_str)):
+                     location = getAgvLocation(stationTag_str)
                      loc_str = getAgvLocation(stationTag_str)
-                     print(loc_str)
-                     inform_server(loc_str, agvState) #to local server TODO            
+                     inform_server(loc_str, agvState) #to local server   
             if smallAgvAttached == True:
                 if (stock1 is not None) and (stock2 is not None): #NFC reader present
                     stock1Tag = stock1.read_passive_target(timeout=0.1)
@@ -308,17 +356,32 @@ if __name__ == '__main__':
                     if stock2Tag is not None:
                         print('Found stock2 with nfc UID: ', get_uid_string(stock2Tag))
                     if (agvState != (getAgvState(get_uid_string(stock1Tag), get_uid_string(stock2Tag)))):
-                        print("before: ", agvState)
                         agvState = getAgvState(get_uid_string(stock1Tag), get_uid_string(stock2Tag))  
-                        print("after: ", agvState)
                         publishNextAgvState(agvState)
                         inform_server(location, agvState) #localServer
-
-                
+            #neopixel handling
+            if time.perf_counter() > timeToSwitchNeopixel:
+               littleAgvFull = False
+               print(agvState)
+               if agvState == AgvState.EQUIPPED_ELECTRIC_PART2 or agvState == AgvState.EQUIPPED_HYBRID_PART2:
+                  littleAgvFull = True
+               if agvState == AgvState.WRONG_PART:
+                  setNeopixel(RED) #fail
+               elif smallAgvAttached == False and location == getAgvLocation("00000000"): #not on station without little agv
+                  setNeopixel(WAITING1) #blue
+               elif smallAgvAttached == True and location == getAgvLocation("00000000"): #not on station without little agv
+                  setNeopixel(UNDEFINED) #white
+               elif smallAgvAttached == False and location != getAgvLocation("00000000"): #on station without little agv
+                  setNeopixel(WAITING2) #green
+               elif smallAgvAttached == True and location != getAgvLocation("00000000") and littleAgvFull == False: #on station with little agv and not full
+                  setNeopixel(PROGRESS) #orange
+               elif littleAgvFull == True:
+                  setNeopixel(TRANSMIT) #violet
+               timeToSwitchNeopixel = time.perf_counter() + 1.0
 
     except Exception as e:
         print(e)
-        #inform_server("error: " + str(e)) #doesn't make sense here
+        inform_server("error: " + str(e)) #does it make sense here?
         pass
         #goto .begin
     finally:
