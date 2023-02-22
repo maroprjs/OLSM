@@ -9,7 +9,7 @@
 		"EQUIPPED_ELECTRIC_PART1": {
 			"src": ["none"]
 		},
-		"EQUIPPED_ELECTRIC": {
+		"EQUIPPED_ELECTRIC_PART2": {
 			"src": ["videos/02_electric_car_agv_only_battery_approaching_amr.mp4"]
 		},
 		"UNEQUIPPED_HYBRID": {
@@ -18,7 +18,7 @@
 		"EQUIPPED_HYBRID_PART1": {
 			"src": ["none"]
 		},
-		"EQUIPPED_HYBRID": {
+		"EQUIPPED_HYBRID_PART2": {
 			"src": ["videos/12_hybrid_car_agv_only_battery_approaching_amr.mp4"]
 		}
 	},
@@ -32,7 +32,7 @@
 		"EQUIPPED_ELECTRIC_PART1": {
 			"src": ["none"]
 		},
-		"EQUIPPED_ELECTRIC": {
+		"EQUIPPED_ELECTRIC_PART2": {
 			"src": ["videos/03_electric_car_agv_assembled_engines.mp4", "videos/04_electric_car_agv_assembled_cables.mp4"]
 		},
 		"UNEQUIPPED_HYBRID": {
@@ -41,7 +41,7 @@
 		"EQUIPPED_HYBRID_PART1": {
 			"src": ["none"]
 		},
-		"EQUIPPED_HYBRID": {
+		"EQUIPPED_HYBRID_PART2": {
 			"src": ["videos/13_hybrid_car_agv_assembled_engines.mp4", "videos/14_hybrid_car_agv_assembled_cables.mp4"]
 		}
 	},
@@ -55,7 +55,7 @@
 		"EQUIPPED_ELECTRIC_PART1": {
 			"src": ["none"]
 		},
-		"EQUIPPED_ELECTRIC": {
+		"EQUIPPED_ELECTRIC_PART2": {
 			"src": ["videos/05_electric_car_agv_during_software_upload.mp4", "videos/06_electric_car_agv_fully_assembled.mp4"]
 		},
 		"UNEQUIPPED_HYBRID": {
@@ -64,7 +64,7 @@
 		"EQUIPPED_HYBRID_PART1": {
 			"src": ["none"]
 		},
-		"EQUIPPED_HYBRID": {
+		"EQUIPPED_HYBRID_PART2": {
 			"src": ["videos/15_hybrid_car_agv_during_software_upload.mp4", "videos/16_hybrid_car_agv_fully_assembled.mp4"]
 		}
 	},
@@ -78,7 +78,7 @@
 		"EQUIPPED_ELECTRIC_PART1": {
 			"src": ["none"]
 		},
-		"EQUIPPED_ELECTRIC": {
+		"EQUIPPED_ELECTRIC_PART2": {
 			"src": ["videos/06_electric_car_agv_fully_assembled.mp4"]
 		},
 		"UNEQUIPPED_HYBRID": {
@@ -87,7 +87,7 @@
 		"EQUIPPED_HYBRID_PART1": {
 			"src": ["none"]
 		},
-		"EQUIPPED_HYBRID": {
+		"EQUIPPED_HYBRID_PART2": {
 			"src": ["videos/16_hybrid_car_agv_fully_assembled.mp4"]
 		}
 	},
@@ -101,7 +101,7 @@
 		"EQUIPPED_ELECTRIC_PART1": {
 			"src": ["none"]
 		},
-		"EQUIPPED_ELECTRIC": {
+		"EQUIPPED_ELECTRIC_PART2": {
 			"src": ["videos/06_electric_car_agv_fully_assembled.mp4"]
 		},
 		"UNEQUIPPED_HYBRID": {
@@ -110,7 +110,7 @@
 		"EQUIPPED_HYBRID_PART1": {
 			"src": ["none"]
 		},
-		"EQUIPPED_HYBRID": {
+		"EQUIPPED_HYBRID_PART2": {
 			"src": ["videos/16_hybrid_car_agv_fully_assembled.mp4"]
 		}
 	}

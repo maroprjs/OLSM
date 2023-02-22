@@ -292,6 +292,16 @@ def setNeopixel(colr):
         gFlipFlop = False
    pixels.show()
 
+def setNeopixelInitOn():
+    global pixels
+    pixels.fill((35,15,0))
+    pixels.show()
+
+def setNeopixelInitOff():
+    global pixels
+    pixels.fill((0,0,0))
+    pixels.show()
+
 if __name__ == '__main__':
     #print($HOSTNAME)
     #print(socket.gethostname())
@@ -300,9 +310,11 @@ if __name__ == '__main__':
     #stock2State = StockState.EMPTY
     location = Location.UNDEFINED
     #stockCount = 0
+    setNeopixelInitOn()
     station = initializeStationReader()
     stock1 = initializeStock1Reader()
     stock2 = initializeStock2Reader()
+    setNeopixelInitOff()
     stock1Tag = "00000000"
     stock2Tag = "00000000"
     agvState = AgvState.UNEQUIPPED_ELECTRIC
@@ -315,7 +327,6 @@ if __name__ == '__main__':
     timeToCheckAgvState = time.perf_counter() + STATE_TRANSITION_INTERVAL
     timeToSwitchNeopixel = time.perf_counter() +  1.0
     try:
-        setNeopixel(UNDEFINED)
         while True:
             if time.perf_counter() >= timeToCheckAgvState: #as long as tag is present the time check runs ahead and condition not reached
                 if location != getAgvLocation("00000000"): #this just to know when to stop playing local
@@ -327,12 +338,14 @@ if __name__ == '__main__':
                 smallAgvAttached = False
                 time.sleep(1)
             if (GPIO.input(LITTLE_AGV_ATTACHED_PIN) == False) and (smallAgvAttached == False): #high jump recognized
+                setNeopixelInitOn()
                 time.sleep(1)
                 station = initializeStationReader()
                 stock1 = initializeStock1Reader()
                 stock2 = initializeStock2Reader()
                 smallAgvAttached = True
                 print('Waiting for RFID/NFC card...')
+                setNeopixelInitOff()
 
             # Check if a card is available to read
             if station is not None:
