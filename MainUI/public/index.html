@@ -6,12 +6,10 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>OLSM</title>
     <script src="js/socket-4.4.1.io.min.js"></script>
     <script type="module" src="js/scenario.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <!--style>
    video {
@@ -37,42 +35,36 @@
      height: 1080;
  }
   </style-->
-<body>
-<!--video id="video_source" width="1920" height="1080" style="background-color: transparent; autoplay muted >
+<style>
+    video {
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    }
+</style>
+
+<body style="background-image:  url('Digital Gradient-Green Teal.jpg');">
+    <!--video id="video_source" width="1920" height="1080" style="background-color: transparent; autoplay muted >
     <source src="videos/Big_Buck_Bunny_1080_10s_1MB.mp4" type="video/mp4">
   Your browser does not support the video tag.
   </video-->
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-lg-5">
-    <video id="video_source" width="100%" height="auto"  autoplay muted >
-      <source src="videos/queue.mp4" type="video/mp4" />
-    </video>
-      </div>
-    </div>
-
-  <!--div class="overlay-content"></div>
+    <div style="text-align: center">
+        <video id="video_source" width="1500" height="843" autoplay muted>
+            <source src="videos/queue.mp4" type="video/mp4" /> </video>
+        <!--div class="overlay-content"></div>
   <br>
   <img width="320" height="240" src="/gifs/station_assembly_6.gif"></img-->
-  <div class="row">
-  <div class="col-lg-1">
-  <video id="station1_video" width="19%" height="auto"  autoplay muted >
-    <source src="videos/queue.mp4" type="video/mp4" />
-  </video>
-    <video id="station2_video"  width="19%" height="auto"  autoplay muted >
-    <source src="videos/queue.mp4" type="video/mp4" />
-  </video>
-    <video id="station3_video"  width="19%" height="auto"  autoplay muted >
-    <source src="videos/queue.mp4" type="video/mp4" />
-  </video>
-    <video id="station4_video"  width="19%" height="auto"  autoplay muted >
-    <source src="videos/queue.mp4" type="video/mp4" />
-  </video>
-    <video id="station5_video"  width="19%" height="auto"  autoplay muted >
-    <source src="videos/queue.mp4" type="video/mp4" />
-  </video>
-  </div>
-  </div>
-</div>
+        <div style="margin-top: 25px">
+            <video style="margin-right: 50px" id="station1_video" width="320" height="180" autoplay muted>
+                <source src="videos/queue.mp4" type="video/mp4" /> </video>
+            <video style="margin-right: 50px" id="station2_video" width="320" height="180" autoplay muted>
+                <source src="videos/queue.mp4" type="video/mp4" /> </video>
+            <video style="margin-right: 50px" id="station3_video" width="320" height="180" autoplay muted>
+                <source src="videos/queue.mp4" type="video/mp4" /> </video>
+            <video style="margin-right: 50px" id="station4_video" width="320" height="180" autoplay muted>
+                <source src="videos/queue.mp4" type="video/mp4" /> </video>
+            <video id="station5_video" width="320" height="180" autoplay muted>
+                <source src="videos/queue.mp4" type="video/mp4" /> </video>
+        </div>
+    </div>
 </body>
+
 </html>
