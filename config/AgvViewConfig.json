@@ -24,7 +24,7 @@
     }
     , "station2": {
         "FREE": {
-            "src": ["2_Station.mp4"]
+            "src": ["videos/2_Station.mp4"]
         }
         , "UNEQUIPPED_ELECTRIC": {
             "src": ["videos/2.1_EV.mp4"]
@@ -47,7 +47,7 @@
     }
     , "station3": {
         "FREE": {
-            "src": ["3_Station.mp4"]
+            "src": ["videos/3_Station.mp4"]
         }
         , "UNEQUIPPED_ELECTRIC": {
             "src": ["videos/3.1_EV.mp4"]
@@ -70,7 +70,7 @@
     }
     , "station4": {
         "FREE": {
-            "src": ["4_Station.mp4"]
+            "src": ["videos/4_Station.mp4"]
         }
         , "UNEQUIPPED_ELECTRIC": {
             "src": ["videos/4.1_EV.mp4"]
@@ -94,7 +94,7 @@
     }
     , "station5": {
         "FREE": {
-            "src": ["5_Station.mp4"]
+            "src": ["videos/5_Station.mp4"]
         }
         , "UNEQUIPPED_ELECTRIC": {
             "src": ["videos/5.1_EV.mp4"]
