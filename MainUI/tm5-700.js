@@ -2,8 +2,8 @@
 
 //defines:
 var IO_SOCKET_SERVER_URL = 'http://0.0.0.0/';
-var TM5_IP_ADDRESS = "10.200.21.120"
-var TCP_PORT = 12346 //29999
+var TM5_IP_ADDRESS = "10.200.20.61"
+var TCP_PORT = 12345 //29999
 
 const net = require('net');
 //const tcpServer = net.createServer(onClientConnection); //https://www.yld.io/blog/building-a-tcp-service-using-node-js/
@@ -33,11 +33,15 @@ ioSocket.on('station_state_info', function (data) {
     var stationName = msg[0];
     var tagId = msg[1];
     if (stationName == "station5"){
-        if (tagId == "8ad1aae"){ 
+        if (tagId == "UNEQUIPPED_ELECTRIC"){ 
             //start Robot
-            console.log("TODO: start UR3 robot and disable slector for time of processing"); 
+            console.log("TODO: start disable slector for time of processing"); 
             //tcpClient.write(data);
-            tcpConnection.write(data);
+            if (tcpConnection != undefined){
+               tcpConnection.write("true\r\n");
+            }else{
+              console.log("No TCP client!!");
+            };
         };
     }
 
@@ -60,6 +64,13 @@ function handleConnection(conn) {
     function onConnData(d) {  
         console.log('connection data from %s: %j', remoteAddress, d);  
         //conn.write(d);  
+        //inspection_pic_01
+        if(ioSocket){
+            //console.log("inside socket");
+           //console.log(d);
+           ioSocket.emit('omron_pic', d); //this is received by view.js, to chose appropriate video
+        };
+
     }
     function onConnClose() {  
         console.log('connection from %s closed', remoteAddress);  

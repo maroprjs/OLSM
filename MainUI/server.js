@@ -88,6 +88,14 @@ ioSocket.sockets.on('connection', function (socket) {
 
 
     })
+
+    socket.on('omron_pic', function (data) { ////emit provided by view.js, forwarded to browser
+        console.log(data);
+        ioSocket.emit('omron_pic', data);
+
+
+    })
+
 });
 
 //------------------------ udp function---------------------------------

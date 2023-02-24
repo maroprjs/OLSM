@@ -2,7 +2,7 @@
 
 //defines:
 var IO_SOCKET_SERVER_URL = 'http://0.0.0.0/';
-var UR3_IP_ADDRESS = "10.200.21.161"
+var UR3_IP_ADDRESS = "10.200.20.53"
 var UR3_TCP_PORT = 29999 //12345
 var UR3_PROGRAMM = "mwc23_01.urp"
 var FAILED_TO_PLAY = false
@@ -33,7 +33,7 @@ ioSocket.on('station_state_info', function (data) {
     var stationName = msg[0];
     var tagId = msg[1];
     if (stationName == "station2"){
-        if (tagId == "8ad1aae"){ 
+        if (tagId == "EQUIPPED_ELECTRIC_PART2"){ 
             //start Robot
             console.log("TODO: start UR3 robot and disable slector for time of processing"); 
             //tcpClient.write(data);
