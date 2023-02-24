@@ -1,117 +1,118 @@
 {
-	"station1": {
-		"FREE": {
-			"src": ["home"]
-		},
-		"UNEQUIPPED_ELECTRIC": {
-			"src": ["videos/01_electric_car_agv_only_battery.mp4"]
-		},		
-		"EQUIPPED_ELECTRIC_PART1": {
-			"src": ["none"]
-		},
-		"EQUIPPED_ELECTRIC_PART2": {
-			"src": ["videos/02_electric_car_agv_only_battery_approaching_amr.mp4"]
-		},
-		"UNEQUIPPED_HYBRID": {
-			"src": ["videos/11_hybrid_car_agv_only_battery.mp4"]
-		},
-		"EQUIPPED_HYBRID_PART1": {
-			"src": ["none"]
-		},
-		"EQUIPPED_HYBRID_PART2": {
-			"src": ["videos/12_hybrid_car_agv_only_battery_approaching_amr.mp4"]
-		}
-	},
-	"station2": {
-		"FREE": {
-			"src": ["home"]
-		},
-		"UNEQUIPPED_ELECTRIC": {
-			"src": ["none"]
-		},		
-		"EQUIPPED_ELECTRIC_PART1": {
-			"src": ["none"]
-		},
-		"EQUIPPED_ELECTRIC_PART2": {
-			"src": ["videos/03_electric_car_agv_assembled_engines.mp4", "videos/04_electric_car_agv_assembled_cables.mp4"]
-		},
-		"UNEQUIPPED_HYBRID": {
-			"src": ["none"]
-		},
-		"EQUIPPED_HYBRID_PART1": {
-			"src": ["none"]
-		},
-		"EQUIPPED_HYBRID_PART2": {
-			"src": ["videos/13_hybrid_car_agv_assembled_engines.mp4", "videos/14_hybrid_car_agv_assembled_cables.mp4"]
-		}
-	},
-	"station3": {
-		"FREE": {
-			"src": ["home"]
-		},
-		"UNEQUIPPED_ELECTRIC": {
-			"src": ["videos/05_electric_car_agv_during_software_upload.mp4", "videos/06_electric_car_agv_fully_assembled.mp4"]
-		},		
-		"EQUIPPED_ELECTRIC_PART1": {
-			"src": ["none"]
-		},
-		"EQUIPPED_ELECTRIC_PART2": {
-			"src": ["videos/05_electric_car_agv_during_software_upload.mp4", "videos/06_electric_car_agv_fully_assembled.mp4"]
-		},
-		"UNEQUIPPED_HYBRID": {
-			"src": ["videos/15_hybrid_car_agv_during_software_upload.mp4", "videos/16_hybrid_car_agv_fully_assembled.mp4"]
-		},
-		"EQUIPPED_HYBRID_PART1": {
-			"src": ["none"]
-		},
-		"EQUIPPED_HYBRID_PART2": {
-			"src": ["videos/15_hybrid_car_agv_during_software_upload.mp4", "videos/16_hybrid_car_agv_fully_assembled.mp4"]
-		}
-	},
-	"station4": {
-		"FREE": {
-			"src": ["home"]
-		},
-		"UNEQUIPPED_ELECTRIC": {
-			"src": ["videos/06_electric_car_agv_fully_assembled.mp4"]
-		},		
-		"EQUIPPED_ELECTRIC_PART1": {
-			"src": ["none"]
-		},
-		"EQUIPPED_ELECTRIC_PART2": {
-			"src": ["videos/06_electric_car_agv_fully_assembled.mp4"]
-		},
-		"UNEQUIPPED_HYBRID": {
-			"src": ["videos/16_hybrid_car_agv_fully_assembled.mp4"]
-		},
-		"EQUIPPED_HYBRID_PART1": {
-			"src": ["none"]
-		},
-		"EQUIPPED_HYBRID_PART2": {
-			"src": ["videos/16_hybrid_car_agv_fully_assembled.mp4"]
-		}
-	},
-	"station5": {
-		"FREE": {
-			"src": ["home"]
-		},
-		"UNEQUIPPED_ELECTRIC": {
-			"src": ["videos/06_electric_car_agv_fully_assembled.mp4"]
-		},		
-		"EQUIPPED_ELECTRIC_PART1": {
-			"src": ["none"]
-		},
-		"EQUIPPED_ELECTRIC_PART2": {
-			"src": ["videos/06_electric_car_agv_fully_assembled.mp4"]
-		},
-		"UNEQUIPPED_HYBRID": {
-			"src": ["videos/16_hybrid_car_agv_fully_assembled.mp4"]
-		},
-		"EQUIPPED_HYBRID_PART1": {
-			"src": ["none"]
-		},
-		"EQUIPPED_HYBRID_PART2": {
-			"src": ["videos/16_hybrid_car_agv_fully_assembled.mp4"]
-		}
-	}
+    "station1": {
+        "FREE": {
+            "src": ["videos/1_Station.mp4"]
+        }
+        , "UNEQUIPPED_ELECTRIC": {
+            "src": ["videos/1.1_EV.mp4"]
+        }
+        , "EQUIPPED_ELECTRIC_PART1": {
+            "src": ["none"]
+        }
+        , "EQUIPPED_ELECTRIC_PART2": {
+            "src": ["videos/1.2_EV.mp4"]
+        }
+        , "UNEQUIPPED_HYBRID": {
+            "src": ["videos/1.1_Hybrid.mp4"]
+        }
+        , "EQUIPPED_HYBRID_PART1": {
+            "src": ["none"]
+        }
+        , "EQUIPPED_HYBRID_PART2": {
+            "src": ["videos/1.2_Hybrid.mp4"]
+        }
+    }
+    , "station2": {
+        "FREE": {
+            "src": ["2_Station.mp4"]
+        }
+        , "UNEQUIPPED_ELECTRIC": {
+            "src": ["videos/2.1_EV.mp4"]
+        }
+        , "EQUIPPED_ELECTRIC_PART1": {
+            "src": ["none"]
+        }
+        , "EQUIPPED_ELECTRIC_PART2": {
+            "src": ["videos/2.2_EV.mp4"]
+        }
+        , "UNEQUIPPED_HYBRID": {
+            "src": ["videos/2.1_Hybrid.mp4"]
+        }
+        , "EQUIPPED_HYBRID_PART1": {
+            "src": ["none"]
+        }
+        , "EQUIPPED_HYBRID_PART2": {
+            "src": ["videos/2.2_Hybrid.mp4"]
+        }
+    }
+    , "station3": {
+        "FREE": {
+            "src": ["3_Station.mp4"]
+        }
+        , "UNEQUIPPED_ELECTRIC": {
+            "src": ["videos/3.1_EV.mp4"]
+        }
+        , "EQUIPPED_ELECTRIC_PART1": {
+            "src": ["none"]
+        }
+        , "EQUIPPED_ELECTRIC_PART2": {
+            "src": ["videos/3.2_EV.mp4"]
+        }
+        , "UNEQUIPPED_HYBRID": {
+            "src": ["videos/3.1_Hybrid.mp4"]
+        }
+        , "EQUIPPED_HYBRID_PART1": {
+            "src": ["none"]
+        }
+        , "EQUIPPED_HYBRID_PART2": {
+            "src": ["videos/3.2_Hybrid.mp4"]
+        }
+    }
+    , "station4": {
+        "FREE": {
+            "src": ["4_Station.mp4"]
+        }
+        , "UNEQUIPPED_ELECTRIC": {
+            "src": ["videos/4.1_EV.mp4"]
+        }
+        , "EQUIPPED_ELECTRIC_PART1": {
+            "src": ["none"]
+        }
+        , "EQUIPPED_ELECTRIC_PART2": {
+            "src": ["videos/4.2_EV.mp4"]
+        }
+        , "UNEQUIPPED_HYBRID": {
+            "src": ["videos/4.1_Hybrid.mp4"]
+        }
+        , "EQUIPPED_HYBRID_PART1": {
+            "src": ["none"]
+        }
+        , "EQUIPPED_HYBRID_PART2": {
+            "src": ["videos/4.2_Hybrid.mp4"
+                ]
+        }
+    }
+    , "station5": {
+        "FREE": {
+            "src": ["5_Station.mp4"]
+        }
+        , "UNEQUIPPED_ELECTRIC": {
+            "src": ["videos/5.1_EV.mp4"]
+        }
+        , "EQUIPPED_ELECTRIC_PART1": {
+            "src": ["none"]
+        }
+        , "EQUIPPED_ELECTRIC_PART2": {
+            "src": ["videos/5.2_EV.mp4"]
+        }
+        , "UNEQUIPPED_HYBRID": {
+            "src": ["videos/5.1_Hybrid.mp4"]
+        }
+        , "EQUIPPED_HYBRID_PART1": {
+            "src": ["none"]
+        }
+        , "EQUIPPED_HYBRID_PART2": {
+            "src": ["videos/5.2_Hybrid.mp4"]
+        }
+    }
 }
