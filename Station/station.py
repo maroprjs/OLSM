@@ -4,11 +4,11 @@ import socket
 import time
 from enum import Enum
 
-UDP_IP = "10.200.21.80"
+UDP_IP = "10.200.20.57"
 UDP_PORT = 5555
 gHostName = socket.gethostname()
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-STATE_TRANSITION_INTERVAL = 1.0
+STATE_TRANSITION_INTERVAL = 1.5
 MIN_NO_OF_SAME_TAGE_BEFORE_TRANSITION = 5
 
 
@@ -76,6 +76,7 @@ if __name__ == '__main__':
                 print('Found card with UID:', [hex(i) for i in uid], 'as string: ', uid_as_str)
                 if stationState != getStationState(uid_as_str):
                     tagTransitionCount += 1
+                    print(tagTransitionCount)
                     if tagTransitionCount >= MIN_NO_OF_SAME_TAGE_BEFORE_TRANSITION:
                         inform_server(uid_as_str)
                         stationState = getStationState(uid_as_str)
