@@ -164,6 +164,10 @@ def getAgvState(stock1_tag, stock2_tag ):
             agvState = AgvState.EQUIPPED_HYBRID_PART1
         elif part1_type == "FUEL" and part2_type == "NONE":
             agvState = AgvState.EQUIPPED_HYBRID_PART1
+        elif part1_type == "NONE" and part2_type == "ELECTRIC":
+            agvState = AgvState.EQUIPPED_HYBRID_PART1
+        elif part1_type == "ELECTRIC" and part2_type == "NONE":
+            agvState = AgvState.EQUIPPED_HYBRID_PART1
         elif part1_type == "ELECTRIC" and part2_type == "FUEL":
             agvState = AgvState.EQUIPPED_HYBRID_PART2
         elif part1_type == "FUEL" and part2_type == "ELECTRIC":
@@ -340,7 +344,7 @@ def setNeopixelOff():
 if __name__ == '__main__':
     #print($HOSTNAME)
     #print(socket.gethostname())
-    smallAgvAttached = False
+    smallAgvAttached = True
     #stock1State = StockState.EMPTY
     #stock2State = StockState.EMPTY
     location = Location.UNDEFINED
@@ -362,6 +366,7 @@ if __name__ == '__main__':
     timeToCheckLocState = time.perf_counter() + STATE_TRANSITION_INTERVAL
     timeToCheckAgvState = time.perf_counter() + STATE_TRANSITION_INTERVAL
     timeToSwitchNeopixel = time.perf_counter() +  1.0
+    #print(agvState)
     try:
         while True:
             if time.perf_counter() >= timeToCheckLocState: #as long as tag is present the time check runs ahead and condition not reached
