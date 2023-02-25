@@ -164,9 +164,9 @@ def getAgvState(stock1_tag, stock2_tag ):
             agvState = AgvState.EQUIPPED_HYBRID_PART1
         elif part1_type == "FUEL" and part2_type == "NONE":
             agvState = AgvState.EQUIPPED_HYBRID_PART1
-        elif part1_type == "ELECTRIC" and part2_type == "HYBRID":
+        elif part1_type == "ELECTRIC" and part2_type == "FUEL":
             agvState = AgvState.EQUIPPED_HYBRID_PART2
-        elif part1_type == "HYBRID" and part2_type == "ELECTRIC":
+        elif part1_type == "FUEL" and part2_type == "ELECTRIC":
             agvState = AgvState.EQUIPPED_HYBRID_PART2           
         else:
             agvState = AgvState.WRONG_PART
