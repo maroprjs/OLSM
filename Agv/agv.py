@@ -9,7 +9,7 @@ import os
 
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5555
-AGV_TYPE = "ELECTRIC" #"HYBRID"
+AGV_TYPE = "HYBRID"  #"ELECTRIC"
 gHostName = socket.gethostname()
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 STATE_TRANSITION_INTERVAL = 2.0
@@ -142,6 +142,10 @@ def getAgvState(stock1_tag, stock2_tag ):
     part1_type = PART_TYPES[stock1_tag]
     part2_type = PART_TYPES[stock2_tag]
     agvState = AgvState.UNEQUIPPED_ELECTRIC
+
+    if AGV_TYPE == "HYBRID":
+        agvState = AgvState.UNEQUIPPED_HYBRID
+
     if AGV_TYPE == "ELECTRIC":
         if part1_type == "NONE"and part2_type == "NONE":
             agvState = AgvState.UNEQUIPPED_ELECTRIC
@@ -354,7 +358,6 @@ if __name__ == '__main__':
     publishNextAgvState(agvState)
     if AGV_TYPE == "HYBRID":
         agvState = AgvState.UNEQUIPPED_HYBRID
-        idleState = AgvState.UNEQUIPPED_HYBRID
     GPIO.output(FLASHLIGHT_PIN, False)
     timeToCheckLocState = time.perf_counter() + STATE_TRANSITION_INTERVAL
     timeToCheckAgvState = time.perf_counter() + STATE_TRANSITION_INTERVAL
