@@ -103,6 +103,11 @@ ready(() => {
         };    
     });
 
+    ioSocket.on('omron_pic', function (data) { //data = video source
+        console.log(data); //= inspection_pic_01 inspection_pic_02 inspection_pic_03 inspection_pic_04
+        
+    });
+
     ioSocket.on('_play_main_scenario', function (data) { //data = video source
         //console.log(data);
         //console.log(data["src"]);
