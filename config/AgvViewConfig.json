@@ -10,7 +10,7 @@
             "src": ["none"]
         }
         , "EQUIPPED_ELECTRIC_PART2": {
-            "src": ["videos/1.2_EV.mp4"]
+            "src": ["none"]
         }
         , "UNEQUIPPED_HYBRID": {
             "src": ["videos/1.1_Hybrid.mp4"]
@@ -19,7 +19,7 @@
             "src": ["none"]
         }
         , "EQUIPPED_HYBRID_PART2": {
-            "src": ["videos/1.2_Hybrid.mp4"]
+            "src": ["none"]
         }
     }
     , "station2": {
@@ -27,22 +27,22 @@
             "src": ["videos/2_Station.mp4"]
         }
         , "UNEQUIPPED_ELECTRIC": {
-            "src": ["videos/2.1_EV.mp4"]
+            "src": ["none"]
         }
         , "EQUIPPED_ELECTRIC_PART1": {
             "src": ["none"]
         }
         , "EQUIPPED_ELECTRIC_PART2": {
-            "src": ["videos/2.2_EV.mp4"]
+            "src": ["videos/2.1_EV.mp4"]
         }
         , "UNEQUIPPED_HYBRID": {
-            "src": ["videos/2.1_Hybrid.mp4"]
+            "src": ["none"]
         }
         , "EQUIPPED_HYBRID_PART1": {
             "src": ["none"]
         }
         , "EQUIPPED_HYBRID_PART2": {
-            "src": ["videos/2.2_Hybrid.mp4"]
+            "src": ["videos/2.1_Hybrid.mp4"]
         }
     }
     , "station3": {
@@ -56,7 +56,7 @@
             "src": ["none"]
         }
         , "EQUIPPED_ELECTRIC_PART2": {
-            "src": ["videos/3.2_EV.mp4"]
+            "src": ["none"]
         }
         , "UNEQUIPPED_HYBRID": {
             "src": ["videos/3.1_Hybrid.mp4"]
@@ -65,7 +65,7 @@
             "src": ["none"]
         }
         , "EQUIPPED_HYBRID_PART2": {
-            "src": ["videos/3.2_Hybrid.mp4"]
+            "src": ["none"]
         }
     }
     , "station4": {
@@ -79,7 +79,7 @@
             "src": ["none"]
         }
         , "EQUIPPED_ELECTRIC_PART2": {
-            "src": ["videos/4.2_EV.mp4"]
+            "src": ["none"]
         }
         , "UNEQUIPPED_HYBRID": {
             "src": ["videos/4.1_Hybrid.mp4"]
@@ -88,7 +88,7 @@
             "src": ["none"]
         }
         , "EQUIPPED_HYBRID_PART2": {
-            "src": ["videos/4.2_Hybrid.mp4"
+            "src": ["none"
                 ]
         }
     }
@@ -103,7 +103,7 @@
             "src": ["none"]
         }
         , "EQUIPPED_ELECTRIC_PART2": {
-            "src": ["videos/5.2_EV.mp4"]
+            "src": ["none"]
         }
         , "UNEQUIPPED_HYBRID": {
             "src": ["videos/5.1_Hybrid.mp4"]
@@ -112,7 +112,7 @@
             "src": ["none"]
         }
         , "EQUIPPED_HYBRID_PART2": {
-            "src": ["videos/5.2_Hybrid.mp4"]
+            "src": ["none"]
         }
     }
 }

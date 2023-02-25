@@ -32,20 +32,23 @@ ioSocket.on('station_state_info', function (data) {
     var msg = data.split(',');
     var stationName = msg[0];
     var tagId = msg[1];
+    var timerRobot = 15000;
     if (stationName == "station2"){
-        if (tagId == "EQUIPPED_ELECTRIC_PART2"){ 
+        if ((tagId == "EQUIPPED_ELECTRIC_PART2") || (tagId == "EQUIPPED_HYBRID_PART2")){ 
             //start Robot
             console.log("TODO: start UR3 robot and disable slector for time of processing"); 
             //tcpClient.write(data);
             // Send a connection request to the server.
-            tcpClient.connect({ port: UR3_TCP_PORT, host: UR3_IP_ADDRESS }, function() {
-            // If there is no error, the server has accepted the request and create>
-            // socket dedicated to us.
-            console.log('TCP connection established with the server.');
+            setTimeout( function(){
+                 tcpClient.connect({ port: UR3_TCP_PORT, host: UR3_IP_ADDRESS }, function() {
+                    // If there is no error, the server has accepted the request and create>
+                    // socket dedicated to us.
+                    console.log('TCP connection established with the server.');
 
-            // The client can now send data to the server by writing to its socket.
-            tcpClient.write('play\n');
-            });
+                    // The client can now send data to the server by writing to its socket.
+                    tcpClient.write('play\n');
+                 });
+            },timerRobot);
         };
         if (tagId == "00000000"){
            if (FAILED_TO_PLAY == true){

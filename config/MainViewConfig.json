@@ -4,25 +4,22 @@
             "src": ["none"]
         }
         , "UNEQUIPPED_ELECTRIC": {
-            "src": ["videos/01_electric_car_inventory_warehouse.mp4"]
+            "src": ["videos/1_1_Warehouse_lean_material_handling_HiRes_Final_2.mp4"]
+        } 
+        , "EQUIPPED_ELECTRIC_PART1": {
+            "src": ["none"]
         }
         , "EQUIPPED_ELECTRIC_PART2": {
-            "src": ["videos/02_electric_car_queue_reserving_assembly.mp4"]
+            "src": ["videos/1_2_Lot_size_one_manufacturing_EV_HiRes_Final_2.mp4"]
         }
         , "UNEQUIPPED_HYBRID": {
-            "src": ["videos/11_hybrid_car_inventory_warehouse.mp4"]
+            "src": ["videos/1_1_Warehouse_lean_material_handling_HiRes_Final_2.mp4"]
         }
         , "EQUIPPED_HYBRID_PART1": {
             "src": ["none"]
         }
         , "EQUIPPED_HYBRID_PART2": {
-            "src": ["videos/12_hybrid_car_queue_reserving_assembly.mp4"]
-        }
-        , "TEST_1": {
-            "src": ["videos/12_hybrid_car_queue_reserving_assembly.mp4", "videos/02_electric_car_main_queue_reserving_assembly.mp4"]
-        }
-        , "TEST_2": {
-            "src": ["videos/01_electric_car_inventory_warehouse.mp4"]
+            "src": ["videos/1_2_Lot_size_one_manufacturing_Hybrid_HiRes_Final_2.mp4"]
         }
     }
     , "station2": {
@@ -33,7 +30,7 @@
             "src": ["none"]
         }
         , "EQUIPPED_ELECTRIC_PART2": {
-            "src": ["videos/03_electric_car_assembly_in_progress.mp4", "videos/04_electric_car_reserving_cabling.mp4"]
+            "src": ["videos/2_1_Flexible_robotic_assembly_EV_2.mp4"]
         }
         , "UNEQUIPPED_HYBRID": {
             "src": ["none"]
@@ -42,7 +39,7 @@
             "src": ["none"]
         }
         , "EQUIPPED_HYBRID_PART2": {
-            "src": ["videos/13_hybrid_car_assembly_in_progress.mp4", "videos/14_hybrid_carn_reserving_cabling.mp4"]
+            "src": ["videos/2_1_Flexible_robotic_assembly_Hybrid_2.mp4"]
         }
     }
     , "station3": {
@@ -50,19 +47,22 @@
             "src": ["none"]
         }
         , "UNEQUIPPED_ELECTRIC": {
-            "src": ["videos/05_electric_car_cabling_in_progress.mp4", "videos/06_electric_car_reserving_software_upload.mp4"]
+            "src": ["videos/3_1_Automation_assisted_manual_assembly_EV_2.mp4"]
+        }
+        , "EQUIPPED_ELECTRIC_PART1": {
+            "src": ["none"]
         }
         , "EQUIPPED_ELECTRIC_PART2": {
-            "src": ["videos/05_electric_car_cabling_in_progress.mp4", "videos/06_electric_car_reserving_software_upload.mp4"]
+            "src": ["none"]
         }
         , "UNEQUIPPED_HYBRID": {
-            "src": ["videos/15_hybrid_car_cabling_in_progress.mp4", "videos/16_hybrid_car_reserving_software_upload.mp4"]
+            "src": ["videos/3_1_Automation_assisted_manual_assembly_hybrid_2.mp4"]
         }
         , "EQUIPPED_HYBRID_PART1": {
             "src": ["none"]
         }
         , "EQUIPPED_HYBRID_PART2": {
-            "src": ["videos/15_hybrid_car_cabling_in_progress.mp4", "videos/16_hybrid_car_reserving_software_upload.mp4"]
+            "src": ["none"]
         }
     }
     , "station4": {
@@ -70,19 +70,22 @@
             "src": ["none"]
         }
         , "UNEQUIPPED_ELECTRIC": {
-            "src": ["videos/07_electric_car_software_Upload_in_progress.mp4", "videos/08_electric_car_reserving_final_inspection.mp4"]
+            "src": ["videos/4_1_Software_update_and_test_EV_2.mp4"]
+        }
+        , "EQUIPPED_ELECTRIC_PART1": {
+            "src": ["none"]
         }
         , "EQUIPPED_ELECTRIC_PART2": {
-            "src": ["videos/07_electric_car_software_Upload_in_progress.mp4", "videos/08_electric_car_reserving_final_inspection.mp4"]
+            "src": ["none"]
         }
         , "UNEQUIPPED_HYBRID": {
-            "src": ["videos/17_hybrid_car_software_Upload_in_progress.mp4", "videos/18_hybrid_car_reserving_final_inspection.mp4"]
+            "src": ["videos/4_1_Software_update_and_test_Hybrid_2.mp4"]
         }
         , "EQUIPPED_HYBRID_PART1": {
             "src": ["none"]
         }
         , "EQUIPPED_HYBRID_PART2": {
-            "src": ["videos/17_hybrid_car_software_Upload_in_progress.mp4", "videos/18_hybrid_car_reserving_final_inspection.mp4"]
+            "src": ["none"]
         }
     }
     , "station5": {
@@ -90,19 +93,22 @@
             "src": ["videos/00_home.mp4"]
         }
         , "UNEQUIPPED_ELECTRIC": {
-            "src": ["videos/09_electric_car_final_inspection_in_progress.mp4", "videos/10_electric_car_final_inspection_completed_leaving_hall.mp4"]
+            "src": ["videos/5_1_Final_inspection,_quality_control_EV_2.mp4"]
+        }
+        , "EQUIPPED_ELECTRIC_PART1": {
+            "src": ["none"]
         }
         , "EQUIPPED_ELECTRIC_PART2": {
-            "src": ["videos/09_electric_car_final_inspection_in_progress.mp4", "videos/10_electric_car_final_inspection_completed_leaving_hall.mp4"]
+            "src": ["none"]
         }
         , "UNEQUIPPED_HYBRID": {
-            "src": ["videos/19_hybrid_car_final_inspection_in_progress.mp4", "videos/20_hybrid_car_final_inspection_completed_leaving_hall.mp4"]
+            "src": ["videos/5_1_Final_inspection_quality_control_Hybrid_2.mp4"]
         }
         , "EQUIPPED_HYBRID_PART1": {
             "src": ["none"]
         }
         , "EQUIPPED_HYBRID_PART2": {
-            "src": ["videos/19_hybrid_car_final_inspection_in_progress.mp4", "videos/20_hybrid_car_final_inspection_completed_leaving_hall.mp4"]
+            "src": ["none"]
         }
     }
 }

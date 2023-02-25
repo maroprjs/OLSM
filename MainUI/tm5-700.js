@@ -33,7 +33,7 @@ ioSocket.on('station_state_info', function (data) {
     var stationName = msg[0];
     var tagId = msg[1];
     if (stationName == "station5"){
-        if (tagId == "UNEQUIPPED_ELECTRIC"){ 
+        if ((tagId == "UNEQUIPPED_ELECTRIC")||(tagId == "UNEQUIPPED_HYBRID")){ 
             //start Robot
             console.log("TODO: start disable slector for time of processing"); 
             //tcpClient.write(data);
