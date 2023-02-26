@@ -4,6 +4,10 @@ var currentMainVideo = 0;
 var videos = ""; //main
 var currentAgvVideo = 0;
 var agvVideos = ""; //
+var videoMainTimer = 30000;
+var videoMain = true;
+var videoAgvTimer = 30000;
+var videoAgv = true;
 //fetch('./config/MainViewConfig.json')
 //    .then((response) => response.json())
 //    .then((json) => console.log(json));
@@ -28,6 +32,7 @@ ready(() => {
     });
     //https://stackoverflow.com/questions/21471116/html5-video-waiting-for-video-end-waiting-for-video-ready
     function playMainSequence(stationName) { //Main //https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/ended_event 
+      
         var videosrc = document.getElementById('video_source'); //https://www.experts-exchange.com/questions/28664145/play-multiple-videos-in-a-loop-using-HTML5-and-JavaScript.html
         videosrc.removeEventListener('ended', playMainSequence);
         //console.log(currentMainVideo);
@@ -64,6 +69,7 @@ ready(() => {
         }
     };
     ioSocket.on('station_state_info', function (data) {
+    
         console.log(data);
         //console.log(data.valueOf());
         var msg = data.split(',');
@@ -75,7 +81,16 @@ ready(() => {
             if (data["src"] != 'none') {
                 videos = data["src"];
                 currentMainVideo = 0;
-                playMainSequence(stationName);
+                if(stationName == "station5" && videoMain){
+                  videoMain = false;
+                  playMainSequence(stationName);
+                  setTimeout(function(){ videoMain = true;},videoMainTimer);
+                }
+                if(stationName == "station5" && !videoMain) {
+                }
+                else{
+                  playMainSequence(stationName);
+                }
             };
         }
         else {
@@ -88,7 +103,17 @@ ready(() => {
             if (data["src"] != 'none') {
                 agvVideos = data["src"];
                 currentAgvVideo = 0;
-                playAgvSequence(stationName);
+                 if(stationName == "station5" && videoAgv){
+                  videoAgv = false;
+                  playAgvSequence(stationName);
+                  setTimeout(function(){ videoAgv = true;},videoAgvTimer);
+                }
+                if(stationName == "station5" && !videoAgv) {
+                }
+                else{
+                  playAgvSequence(stationName);
+                }
+                
             };
         }
         else {

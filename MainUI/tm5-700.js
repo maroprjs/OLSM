@@ -4,8 +4,8 @@
 var IO_SOCKET_SERVER_URL = 'http://0.0.0.0/';
 var TM5_IP_ADDRESS = "10.200.20.61"
 var TCP_PORT = 12345 //29999
-var robotEnabled;
-var robotEnabledTimer = 60000;
+var robotEnabled = true;
+var robotEnabledTimer = 30000;
 
 const net = require('net');
 //const tcpServer = net.createServer(onClientConnection); //https://www.yld.io/blog/building-a-tcp-service-using-node-js/
@@ -43,12 +43,8 @@ ioSocket.on('station_state_info', function (data) {
             if (tcpConnection != undefined){
               if(robotEnabled){
                 robotEnabled = false;
-                setTimeout(function(){
-                  robotEnabled = true},
-                  robotEnabledTimer)
-                setTimeout(function(){
-                  tcpConnection.write("true\r\n");}
-                  ,timerRobot); 
+                setTimeout(function(){robotEnabled = true},robotEnabledTimer)
+                setTimeout(function(){tcpConnection.write("true\r\n");},timerRobot); 
               }
                         
              }else{

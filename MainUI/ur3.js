@@ -7,7 +7,7 @@ var UR3_TCP_PORT = 29999 //12345
 var UR3_PROGRAMM = "mwc23_01.urp"
 var FAILED_TO_PLAY = false;
 var robotEnabled = true;
-var robotEnabledTimer = 60000;
+var robotEnabledTimer = 30000;
 
 const net = require('net');
 const tcpClient = new net.Socket(); //https://plainenglish.io/blog/how-to-set-up-your-tcp-client-server-application-with-nodejs-from-scratch-5d218a1300f2
@@ -35,29 +35,30 @@ ioSocket.on('station_state_info', function (data) {
     var stationName = msg[0];
     var tagId = msg[1];
     var timerRobot = 2000; //15000
-    if(robotEnabled == true){
-      robotEnabled = false;
+    
        if (stationName == "station2"){
           if ((tagId == "EQUIPPED_ELECTRIC_PART2") || (tagId == "EQUIPPED_HYBRID_PART2")){ 
               //start Robot
               console.log("TODO: start UR3 robot and disable slector for time of processing"); 
               //tcpClient.write(data);
               // Send a connection request to the server.
-              setTimeout( function(){
-                   tcpClient.connect({ port: UR3_TCP_PORT, host: UR3_IP_ADDRESS }, function() {
-                      // If there is no error, the server has accepted the request and create>
-                      // socket dedicated to us.
-                      console.log('TCP connection established with the server.');
-  
-                      // The client can now send data to the server by writing to its socket.
-                      tcpClient.write('play\n');
-                      setTimeout(function(){
-                           robotEnabled = true;
-                      },robotEnabledTimer);
-                      
-                   });
-              },timerRobot);
-          };
+              if(robotEnabled){
+                robotEnabled = false;
+                setTimeout( function(){
+                     tcpClient.connect({ port: UR3_TCP_PORT, host: UR3_IP_ADDRESS }, function() {
+                        // If there is no error, the server has accepted the request and create>
+                        // socket dedicated to us.
+                        console.log('TCP connection established with the server.');
+                        // The client can now send data to the server by writing to its socket.
+                        tcpClient.write('play\n');
+                        setTimeout(function(){
+                             robotEnabled = true;
+                        },robotEnabledTimer);
+                        
+                     });
+                },timerRobot);
+            };
+          }
           if (tagId == "00000000"){
              if (FAILED_TO_PLAY == true){
                 tcpClient.connect({ port: UR3_TCP_PORT, host: UR3_IP_ADDRESS }, function() {
@@ -67,7 +68,7 @@ ioSocket.on('station_state_info', function (data) {
              };
           };
       }
-    }
+    
    
 
 });
