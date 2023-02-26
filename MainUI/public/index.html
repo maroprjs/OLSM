@@ -39,6 +39,19 @@
     video {
         box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
     }
+    
+    #video_box {
+        position: relative;
+    }
+    
+    #video_overlays {
+        position: absolute;
+        width: 100%;
+        min-height: 250px;
+        z-index: 300000;
+        bottom: %;
+        text-align: center;
+    }
 </style>
 
 <body style="background-image:  url('Digital Gradient-Green Teal.jpg'); margin: 0px;">
@@ -48,8 +61,15 @@
   </video-->
     <div style="text-align: center">
         <div style="margin-top: 25px">
-            <video id="video_source" width="1450" height="815" autoplay muted>
-                <source src="videos/00_home.mp4" type="video/mp4" /> <img src="videos/00_nosrc.jpg"> </video>
+            <div id="wrap_video">
+                <div id="video_box">
+                    <div id="video_overlays"> <img id="picRobot" style="width: 450px;margin-top: 1%;margin-left: 50%"></div>
+                    <div>
+                        <video id="video_source" width="1450" height="815" autoplay muted>
+                            <source src="videos/00_home.mp4" type="video/mp4" /> <img src="videos/00_nosrc.jpg"> </video>
+                    </div>
+                </div>
+            </div>
         </div>
         <!--div class="overlay-content"></div>
   <br>
