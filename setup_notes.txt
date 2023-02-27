@@ -1,0 +1,54 @@
+notes:
+
+-install bulls eye
+-enable ssh, i2c, spi as needed with sudo raspi-config
+-change hostname with sudo raspi-config as needed (station1-5 & agv1-agv4)
+-in OLSM Agv/agv.js say which type of agv (HYBRID or ELECTRIC)
+
+Deaktivate screen saver in /etc/xdg/lxsession/LXDE-pi/autostart: 
+"...
+sudo nano  /etc/xdg/lxsession/LXDE-pi/autostart
+add:
+@xset s off		#to disable screensaver
+@xset -dpms		#to disable powersaving (prevent screen from turning off)
+@xset s noblank	#disables blank mode for screensaver (maybe not needed)
+#unclutter 		#to hide the mouse -> needsto be installed with apt
+sleep 15		#give some time to start server startup in cron
+@chromium-browser -incognito -kiosk http://127.0.0.1 #chromium-browser is already installed in bullseye
+...." 
+
+Neopixel:
+https://learn.adafruit.com/neopixels-on-raspberry-pi/python-usage
+"..
+sudo pip install rpi_ws281x adafruit-circuitpython-neopixel
+sudo python3 -m pip install --force-reinstall adafruit-blinka
+https://github.com/adafruit/Adafruit_CircuitPython_NeoPixel/blob/main/examples/neopixel_rpi_simpletest.py
+.."
+
+visual studio code note: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh
+
+sudo apt install nodejs
+sudo apt install npm
+npm install express
+npm install socket.io
+npm install socket.io-client
+
+Nokia logo to splash under:
+/usr/share/plymouth/themes/pix
+Nokia logo excahnge with cloud.jpg under:
+/usr/share/rpd-wallpaper
+
+get rid of low battery and updater warnings:
+ in: 
+sudo nano /boot/config.txt
+ add:
+avoid_warnings=1
+ then:
+sudo apt remove lxplug-ptbatt
+sudo apt remove lxplug-updater
+
+sudo crontab -e
+@reboot /home/nokia/OLSM/start.sh
+
+
+make sure videos and configs are under OLSM directory and symbolic links under .../public/ for Agv and MainGUI

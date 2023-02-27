@@ -1,0 +1,16 @@
+station 1 tag 14: 4e189f2656080
+station 2 tag 16: 48f7df2656081
+station 3 tag 17: 4547cf2656081
+station 4 tag 18: 46195f2656081
+station 5 tag 20: 4ff95f2656080
+
+fuel tag 21: 48b99f2656081
+fuel tag 22: 4d89bf2656080
+fuel tag 23: 49b9af2656080
+fuel tag 24: 43c89f2656081
+
+electro tag 25: 41f82f2656081
+electro tag 26: 4808af2656080
+electro tag 27: 4b876f2656080 
+electro tag 28: 46071f2656081
+
