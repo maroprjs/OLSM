@@ -1,6 +1,6 @@
 notes:
 
--install bulls eye (in /boot/config.txt uncomment first entry 'hdmi_safe=1' to get HDMI working)
+-install bulls eye (in /boot/config.txt uncomment first entry 'hdmi_safe=1' to get HDMI working if external screen is needed, but take it off again for final display!)
 -enable ssh, i2c, spi as needed with sudo raspi-config
 -change hostname with sudo raspi-config as needed (station1-5 & agv1-agv4)
 -in OLSM Agv/agv.js say which type of agv (HYBRID or ELECTRIC)
@@ -30,8 +30,9 @@ visual studio code note: https://marketplace.visualstudio.com/items?itemName=ms-
 sudo apt install nodejs
 sudo apt install npm
 npm install express
-npm install socket.io
-npm install socket.io-client
+npm install socket.io (for small setup)
+npm install socket.io-client (for small setup)
+sudo pip install python-socketio (for small setup)
 
 Nokia logo to splash under:
 /usr/share/plymouth/themes/pix
