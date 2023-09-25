@@ -50,5 +50,6 @@ sudo apt remove lxplug-updater
 sudo crontab -e
 @reboot /home/nokia/OLSM/start.sh
 
+in start.sh uncomment unused script (Agv for normal or small setup)
 
 make sure videos and configs are under OLSM directory and symbolic links under .../public/ for Agv and MainGUI
