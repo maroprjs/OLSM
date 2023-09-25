@@ -71,10 +71,26 @@ PART_TYPES = {
   "4d89bf2656080": "FUEL",
   "49b9af2656080": "FUEL",
   "43c89f2656081": "FUEL",
+  "4785bd29e7381": "FUEL", #fuel tag 201
+  "4665bd29e7381": "FUEL", #fuel tag 202
+  "4745ad29e7381": "FUEL", #fuel tag 203
+  "4795bd29e7381": "FUEL", #fuel tag 204
+  "4b35fd29e7380": "FUEL", #fuel tag 205
   "41f82f2656081": "ELECTRIC",
   "4808af2656080": "ELECTRIC",
   "4b876f2656080": "ELECTRIC",
   "46071f2656081": "ELECTRIC",
+  "4675bd29e7381": "ELECTRIC", #electric tag 251
+  "47b5fd29e7380": "ELECTRIC", #electric tag 252
+  "4675fd29e7380": "ELECTRIC", #electric tag 253
+  "4c55fd29e7380": "ELECTRIC", #electric tag 254
+  "4e55fd29e7380": "ELECTRIC", #electric tag 255
+  "4e65fd29e7380": "ELECTRIC", #electric tag 256
+  "4c65fd29e7380": "ELECTRIC", #electric tag 257
+  "4335fd29e7381": "ELECTRIC", #electric tag 258
+  "4b45fd29e7380": "ELECTRIC", #electric tag 259
+  "4135fd29e7381": "ELECTRIC", #electric tag 260
+  "47858d29e7381": "ELECTRIC", #electric tag 261
   "00000000":"NONE"
 }
 
