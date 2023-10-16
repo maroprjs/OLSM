@@ -369,9 +369,9 @@ if __name__ == '__main__':
     stock1Tag = "00000000"
     stock2Tag = "00000000"
     agvState = AgvState.UNEQUIPPED_ELECTRIC
-    publishNextAgvState(agvState)
     if AGV_TYPE == "HYBRID":
         agvState = AgvState.UNEQUIPPED_HYBRID
+    publishNextAgvState(agvState)
     GPIO.output(FLASHLIGHT_PIN, False)
     timeToCheckLocState = time.perf_counter() + STATE_TRANSITION_INTERVAL
     timeToCheckAgvState = time.perf_counter() + STATE_TRANSITION_INTERVAL

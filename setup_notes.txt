@@ -33,10 +33,10 @@ npm install express
 npm install socket.io (for small setup)
 npm install socket.io-client (for small setup)
 sudo pip install python-socketio (for small setup)
-
+sudo pip install websocket-client (for small setup)
 Nokia logo to splash under:
 /usr/share/plymouth/themes/pix
-Nokia logo excahnge with cloud.jpg under:
+Nokia logo excahnge with clouds.jpg under:
 /usr/share/rpd-wallpaper
 
 get rid of low battery and updater warnings:
@@ -54,3 +54,11 @@ sudo crontab -e
 in start.sh uncomment unused script (Agv for normal or small setup)
 
 make sure videos and configs are under OLSM directory and symbolic links under .../public/ for Agv and MainGUI
+
+for Station small setup to run: 
+ sudo pip3 install python-socketio
+ sudo pip3 install websocket-client
+
+for streamdeck/companion:
+to set role of station, send udp to port 5556, e.g. "station4,QUEUE" (general: "<hostnameOfStation>, <role>")
+role = QUEUE, ASSEMBLY, CABLING, PROGRAMMING, INSPECTION

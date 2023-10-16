@@ -9,11 +9,11 @@ import os
 import socketio
 import threading
 
-MAIN_GUI_IP = "10.200.20.57"
+MAIN_GUI_IP = "192.168.0.118"
 MAIN_GUI_IO_SOCKET = 80
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5555
-AGV_TYPE = "HYBRID" #"ELECTRIC"
+AGV_TYPE = "HYBRID"  #"HYBRID" #"ELECTRIC"
 gHostName = socket.gethostname()
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 STATE_TRANSITION_INTERVAL = 2.0
@@ -446,9 +446,10 @@ if __name__ == '__main__':
     stock2Tag = "00000000"
     agvState = AgvState.UNEQUIPPED_ELECTRIC
     gStationRoleDict["QUEUE"] = "station1" #TODO: initialize in server socket IO upon connection
-    publishNextAgvState(agvState)
+    #publishNextAgvState(agvState)
     if AGV_TYPE == "HYBRID":
         agvState = AgvState.UNEQUIPPED_HYBRID
+    publishNextAgvState(agvState)
     GPIO.output(FLASHLIGHT_PIN, False)
     timeToCheckLocState = time.perf_counter() + STATE_TRANSITION_INTERVAL
     timeToCheckAgvState = time.perf_counter() + STATE_TRANSITION_INTERVAL
