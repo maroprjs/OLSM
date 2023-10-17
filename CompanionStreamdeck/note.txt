@@ -1,0 +1,1 @@
+station2hostname_config.companionconfig has small bug: "station5,FREE" need to be sent without end character
