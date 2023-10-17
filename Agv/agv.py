@@ -197,7 +197,7 @@ def publishNextAgvState(nextState):
         publish_E_ELECTRIC_P2()       
     if nextState == AgvState.EQUIPPED_HYBRID_PART1:
         publish_E_HYBRID_P1()
-    if nextState == AgvState.EQUIPPED_HYBRID_PART1:
+    if nextState == AgvState.EQUIPPED_HYBRID_PART2:
         publish_E_HYBRID_P2()
     if nextState == AgvState.WRONG_PART:
         publish_WRONG_PART()

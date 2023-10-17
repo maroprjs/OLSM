@@ -9,7 +9,7 @@ import os
 import socketio
 import threading
 
-MAIN_GUI_IP = "192.168.0.118"
+MAIN_GUI_IP = "10.200.20.57"
 MAIN_GUI_IO_SOCKET = 80
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5555
@@ -242,7 +242,7 @@ def publishNextAgvState(nextState):
         publish_E_ELECTRIC_P2()       
     if nextState == AgvState.EQUIPPED_HYBRID_PART1:
         publish_E_HYBRID_P1()
-    if nextState == AgvState.EQUIPPED_HYBRID_PART1:
+    if nextState == AgvState.EQUIPPED_HYBRID_PART2:
         publish_E_HYBRID_P2()
     if nextState == AgvState.WRONG_PART:
         publish_WRONG_PART()
