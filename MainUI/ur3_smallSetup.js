@@ -1,4 +1,7 @@
 //UR3 robot handling here: robot is activated when car is filled and at station 2 (fill levek noted ba tagId)
+//
+//Note!!!: TODO: current script wont work if TCP socket from Robot server is temporarily unavailable! 
+//
 
 //defines:
 var IO_SOCKET_SERVER_URL = 'http://0.0.0.0/';
@@ -8,8 +11,9 @@ var UR3_PROGRAMM = "flex_manu_01.urp"
 var UR3_PROGRAMM2 = "flex_manu_02.urp"
 var FAILED_TO_PLAY = false;
 var robotEnabled = true;
-var robotEnabledTimer = 20000;
+var robotEnabledTimer = 15000;
 var stationRoleValid = false;
+var expectedRole = "ASSEMBLY\n"
 
 const net = require('net');
 const tcpClient = new net.Socket(); //https://plainenglish.io/blog/how-to-set-up-your-tcp-client-server-application-with-nodejs-from-scratch-5d218a1300f2
@@ -36,7 +40,7 @@ ioSocket.on('station_mapping_info', function (data) { //requires that presenter 
     var msg = data.split(',');
     var stationName = msg[0]; //not needed
     var stationRole = msg[1];
-    if (stationRole == "ASSEMBLY\n"){
+    if ((stationRole == "ASSEMBLY\n")&&(expectedRole == "ASSEMBLY\n")){
        stationRoleValid = true;
        if(robotEnabled){ //disable any other request for a few seconds
           robotEnabled = false;
@@ -50,7 +54,7 @@ ioSocket.on('station_mapping_info', function (data) { //requires that presenter 
           },3000);
        };
     };
-    if (stationRole == "INSPECTION\n"){
+    if ((stationRole == "INSPECTION\n")&&(expectedRole == "INSPECTION\n")){
        stationRoleValid = true;
        if(robotEnabled){ //disable any other request for a few seconds
           robotEnabled = false;
@@ -75,9 +79,10 @@ ioSocket.on('station_state_info', function (data) {
     
        if ((stationName == "station2")&&(stationRoleValid == true)){
           //if ((tagId == "EQUIPPED_ELECTRIC_PART2") || (tagId == "EQUIPPED_HYBRID_PART2") || (tagId == "EQUIPPED_ELECTRIC_PART1") || (tagId == "EQUIPPED_HYBRID_PART1") || (tagId == "UNEQUIPPED_ELECTRIC") || (tagId == "UNEQUIPPED_HYBRID")){ 
-          if ((tagId == "EQUIPPED_ELECTRIC_PART2") || (tagId == "EQUIPPED_HYBRID_PART2")){ //|| (tagId == "EQUIPPED_ELECTRIC_PART1") || (tagId == "EQUIPPED_HYBRID_PART1")){
+          if (((tagId == "EQUIPPED_ELECTRIC_PART2") || (tagId == "EQUIPPED_HYBRID_PART2")) && (expectedRole == "ASSEMBLY\n")){ //|| (tagId == "EQUIPPED_ELECTRIC_PART1") || (tagId == "EQUIPPED_HYBRID_PART1")){
              if(robotEnabled){
                 robotEnabled = false;
+                expectedRole = "INSPECTION\n"
                 //start Robot
                 setTimeout(function(){
                    setTimeout( function(){
@@ -103,10 +108,11 @@ ioSocket.on('station_state_info', function (data) {
           };
       };
       if ((stationName == "station5")&&(stationRoleValid == true)){
-          if ( (tagId == "UNEQUIPPED_ELECTRIC") || (tagId == "UNEQUIPPED_HYBRID")){
+          if (((tagId == "UNEQUIPPED_ELECTRIC") || (tagId == "UNEQUIPPED_HYBRID")) && (expectedRole == "INSPECTION\n")){
               //start Robot
               if(robotEnabled){
                 robotEnabled = false;
+                expectedRole = "ASSEMBLY\n"
                 setTimeout(function(){
                   setTimeout( function(){
                        tcpClient.connect({ port: UR3_TCP_PORT, host: UR3_IP_ADDRESS }, function() {
