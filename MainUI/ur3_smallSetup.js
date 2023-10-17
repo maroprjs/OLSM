@@ -8,7 +8,8 @@ var UR3_PROGRAMM = "flex_manu_01.urp"
 var UR3_PROGRAMM2 = "flex_manu_02.urp"
 var FAILED_TO_PLAY = false;
 var robotEnabled = true;
-var robotEnabledTimer = 10000;
+var robotEnabledTimer = 20000;
+var stationRoleValid = false;
 
 const net = require('net');
 const tcpClient = new net.Socket(); //https://plainenglish.io/blog/how-to-set-up-your-tcp-client-server-application-with-nodejs-from-scratch-5d218a1300f2
@@ -29,6 +30,41 @@ ioSocket.on('disconnect', function () {
     console.log("Disconnected from " + IO_SOCKET_SERVER_URL );
 });
 
+//requires that presenter publishes the mapping info prior plaving agv on station(via streamdeck/companion)!!
+ioSocket.on('station_mapping_info', function (data) { //requires that presenter publishes the mapping info prior plaving agv on station(via streamdeck/companion)
+    console.log(data);
+    var msg = data.split(',');
+    var stationName = msg[0]; //not needed
+    var stationRole = msg[1];
+    if (stationRole == "ASSEMBLY\n"){
+       stationRoleValid = true;
+       if(robotEnabled){ //disable any other request for a few seconds
+          robotEnabled = false;
+          console.log("loading UR3_PROGRAMM");
+          tcpClient.connect({ port: UR3_TCP_PORT, host: UR3_IP_ADDRESS }, function() {
+             tcpClient.write("load  " + UR3_PROGRAMM + "\n");
+          });
+          setTimeout(function(){
+             robotEnabled = true;
+             console.log("robotenabled")
+          },3000);
+       };
+    };
+    if (stationRole == "INSPECTION\n"){
+       stationRoleValid = true;
+       if(robotEnabled){ //disable any other request for a few seconds
+          robotEnabled = false;
+          console.log("loading UR3_PROGRAMM2");
+          tcpClient.connect({ port: UR3_TCP_PORT, host: UR3_IP_ADDRESS }, function() {
+             tcpClient.write("load  " + UR3_PROGRAMM2 + "\n");
+          });
+          setTimeout(function(){
+             robotEnabled = true;
+          },3000);
+       };
+    };
+});
+
 ioSocket.on('station_state_info', function (data) {
     console.log(data);
     //console.log(data.valueOf());
@@ -37,25 +73,15 @@ ioSocket.on('station_state_info', function (data) {
     var tagId = msg[1];
     var timerRobot = 2000; //15000
     
-       if (stationName == "station2"){
+       if ((stationName == "station2")&&(stationRoleValid == true)){
           //if ((tagId == "EQUIPPED_ELECTRIC_PART2") || (tagId == "EQUIPPED_HYBRID_PART2") || (tagId == "EQUIPPED_ELECTRIC_PART1") || (tagId == "EQUIPPED_HYBRID_PART1") || (tagId == "UNEQUIPPED_ELECTRIC") || (tagId == "UNEQUIPPED_HYBRID")){ 
-          if ((tagId == "EQUIPPED_ELECTRIC_PART2") || (tagId == "EQUIPPED_HYBRID_PART2") || (tagId == "EQUIPPED_ELECTRIC_PART1") || (tagId == "EQUIPPED_HYBRID_PART1")){
-              if(robotEnabled){
-                 robotEnabled = false;
-              //start Robot
-              console.log("TODO: start UR3 robot and disable slector for time of processing");
-              tcpClient.connect({ port: UR3_TCP_PORT, host: UR3_IP_ADDRESS }, function() {
-                   tcpClient.write("load  " + UR3_PROGRAMM + "\n");
-              });
-              setTimeout(function(){
-              //tcpClient.write(data);
-              // Send a connection request to the server.
-              //if(robotEnabled){
-              //  robotEnabled = false;
-                setTimeout( function(){
+          if ((tagId == "EQUIPPED_ELECTRIC_PART2") || (tagId == "EQUIPPED_HYBRID_PART2")){ //|| (tagId == "EQUIPPED_ELECTRIC_PART1") || (tagId == "EQUIPPED_HYBRID_PART1")){
+             if(robotEnabled){
+                robotEnabled = false;
+                //start Robot
+                setTimeout(function(){
+                   setTimeout( function(){
                      tcpClient.connect({ port: UR3_TCP_PORT, host: UR3_IP_ADDRESS }, function() {
-                        // If there is no error, the server has accepted the request and create>
-                        // socket dedicated to us.
                         console.log('TCP connection established with the server.');
                         // The client can now send data to the server by writing to its socket.
                         tcpClient.write('play\n');
@@ -63,10 +89,9 @@ ioSocket.on('station_state_info', function (data) {
                              robotEnabled = true;
                         },robotEnabledTimer);
                      });
-                },timerRobot);
-            //};
-            },2000);
-            };
+                   },timerRobot);
+                },2000);
+             };
           }
           if (tagId == "00000000"){
              if (FAILED_TO_PLAY == true){
@@ -76,21 +101,13 @@ ioSocket.on('station_state_info', function (data) {
                FAILED_TO_PLAY = false;
              };
           };
-      }
-      if (stationName == "station5"){
+      };
+      if ((stationName == "station5")&&(stationRoleValid == true)){
           if ( (tagId == "UNEQUIPPED_ELECTRIC") || (tagId == "UNEQUIPPED_HYBRID")){
               //start Robot
               if(robotEnabled){
                 robotEnabled = false;
-                console.log("TODO: start UR3 robot and disable slector for time of processing");
-                tcpClient.connect({ port: UR3_TCP_PORT, host: UR3_IP_ADDRESS }, function() {
-                    tcpClient.write("load  " + UR3_PROGRAMM2 + "\n");
-                });
                 setTimeout(function(){
-                //tcpClient.write(data);
-                // Send a connection request to the server.
-                //if(robotEnabled){
-                //  robotEnabled = false;
                   setTimeout( function(){
                        tcpClient.connect({ port: UR3_TCP_PORT, host: UR3_IP_ADDRESS }, function() {
                           // If there is no error, the server has accepted the request and create>
@@ -106,7 +123,7 @@ ioSocket.on('station_state_info', function (data) {
                     },timerRobot);
                 },2000);
              }; 
-         }
+          };
           if (tagId == "00000000"){
              if (FAILED_TO_PLAY == true){
                 tcpClient.connect({ port: UR3_TCP_PORT, host: UR3_IP_ADDRESS }, function() {
@@ -115,12 +132,7 @@ ioSocket.on('station_state_info', function (data) {
                FAILED_TO_PLAY = false;
              };
           };
-      }
-
-    
-
-   
-
+      };
 });
 
 
@@ -152,11 +164,14 @@ tcpClient.on('data', function(chunk) {
 
 tcpClient.on('end', function() {
     console.log('Requested an end to the TCP connection');
+    robotEnabled = true;
 });
 
 tcpClient.on('error', function(err) {
     //console.error('Connection error: ' + err);
     //console.error(new Error().stack);
     console.log("connection error detected");
+    robotEnabled = true;
     tcpClient.end();
+    //tcpClient.destroy();
 });
